@@ -1,9 +1,7 @@
 ﻿<?php
 
-/*
-	需要重命名的函数
-*/
-class Nichiijou
+
+class Nichijou_Array
 {
 
 	public function differentItemsInTwoIndexedArrays( $array1, $array2 )
