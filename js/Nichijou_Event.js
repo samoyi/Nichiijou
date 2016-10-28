@@ -23,17 +23,19 @@ function Nichijou_Event(name, age, job)
     {
         // 模拟事件
         /*
-         *  
+         *  可以传入一个对象作为第三个参数，用于重写和补充 defaultEventProperties
          *  
          */
 		/* 
-		 *  TODO  目前只支持 eventsCanSimulate 中的事件
+		 *  TODO  
+		 *    1. 目前只支持 eventsCanSimulate 中的事件
+		 *    2. 这里模拟事件的方法已经被废弃
 		 */	
         Nichijou_Event.prototype.simulateEvent = function simulateEvent(element, eventName)
 		{
 			let eventsCanSimulate = {
-				'HTMLEvent': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
-				'MouseEvent': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+				'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+				'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
 			};
 			let defaultEventProperties = {
 				pointerX: 0,
@@ -65,15 +67,20 @@ function Nichijou_Event(name, age, job)
 			if (document.createEvent)
 			{	
 				oEvent = document.createEvent(eventType);
-				if (eventType == 'HTMLEvents')
+				switch(eventType)
 				{
-					oEvent.initEvent(eventName, options.bubbles, options.cancelable);
-				}
-				else
-				{
-					oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
-					options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
-					options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+					case "HTMLEvents": 
+					{
+						oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+						break;
+					}
+					case "MouseEvents": 
+					{
+						oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+						options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
+						options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+						break;
+					}
 				}
 				element.dispatchEvent(oEvent);
 			}
