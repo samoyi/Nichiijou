@@ -6,20 +6,26 @@
 <body>
 
 </body>
-<script src="Nichijou_Event.js"></script>
+<script src="Nichijou_CrossOrigin.js"></script>
 <script>
 "use strict";
 
-let NG = new Nichijou_Event();
+let NC = new Nichijou_CrossOrigin();
 
-document.addEventListener("click", function(ev)
+function success()
 {
-	console.log(65444444455666);
-});
+	alert( "success" );
+}
+function fail()
+{
+	alert( "fail" );
+}
+let oConfig = 
+{
+	sUrlWithArguments: "http://red-space.cn/test/test.php?name=lining"
+};
 
-NG.simulateEvent(document, "click");
-
-
+NC.imagePing( oConfig );
 
 
 </script>
