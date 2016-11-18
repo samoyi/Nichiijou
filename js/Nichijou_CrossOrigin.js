@@ -39,7 +39,6 @@ function Nichijou_CrossOrigin()
 			img.addEventListener('error', fnFail, false); 
 			img.src = sUrlWithArguments;
 		}
- 
     }
 }
 
