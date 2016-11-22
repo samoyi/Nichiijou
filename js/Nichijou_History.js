@@ -14,8 +14,16 @@ function Nichijou_History()
     
 
     // public properties ---------------------------------------------------------------------------------------
-    Nichijou_History.prototype.length = 
-
+	// 这里需要不需要像定义方法一样先判断一下？判断的原因是什么？
+	Object.defineProperties(Nichijou_History.prototype,
+	{
+		"length": {
+			get: function()
+			{
+				return window.history.length;
+			}
+		}
+	});
 
     
     // public methods ------------------------------------------------------------------------------------------
@@ -31,7 +39,25 @@ function Nichijou_History()
     }
 }
 
-Object.defineProperty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
