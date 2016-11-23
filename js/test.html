@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title></title>
+<title>22</title>
 </head>
 <body>
 <a href="test1.html">111</a>
@@ -10,7 +10,7 @@
 <script src="Nichijou_History.js"></script>
 <script>
 "use strict";
-
+/*
 let NH = new Nichijou_History();
 
 document.querySelector("#forward").addEventListener("click", function()
@@ -18,6 +18,23 @@ document.querySelector("#forward").addEventListener("click", function()
 	alert(NH.length);
 	NH.go(1);
 }, false);
+*/
+
+window.addEventListener("popstate", function(ev)
+{
+	console.log(ev.state);
+	alert(ev.state);
+}, false);
+
+console.log(location.href);
+	
+var stateObj = 666;
+history.pushState(stateObj, "page2", "#66");
+
+console.log(location.href);
+
+	
+
 
 </script>
 </html>
