@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>22</title>
+</head>
+<body>
+
+</body>
+<script src="Front-end_Router_Object.js"></script>
+<script>
+"use strict";
+
+// configuration
+Router.config({mode: 'history'});
+
+// returning the user to the initial state
+setTimeout(function()
+{
+	//Router.navigate();
+
+	// adding routes
+	Router
+		.add(/about/, function ()
+		{
+			console.log('page about');
+		})
+		.add(/hehe/, function ()
+		{
+			console.log('page hehe');
+		})
+		.add(/products\/(.*)\/edit\/(.*)/, function ()
+		{
+			console.log('products', arguments);
+		})
+		.add(function ()
+		{
+			console.log('page default');
+		})
+		.check('/products/12/edit/22').listen().remove(/hehe/).flush;
+
+
+	// forwarding
+	Router.navigate('/about');
+	Router.navigate('/hehe');
+}, 1000);
+
+</script>
+</html>
