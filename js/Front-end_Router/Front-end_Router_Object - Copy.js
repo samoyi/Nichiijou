@@ -1,10 +1,12 @@
 /*
- * 修改自 http://krasimirtsonev.com/blog/article/A-modern-JavaScript-router-in-100-lines-history-api-pushState-hash-url	
+ * Copyright: http://krasimirtsonev.com/blog/article/A-modern-JavaScript-router-in-100-lines-history-api-pushState-hash-url
+ * 对原作者代码的修改： [modify1]	
  */
 
-function createRouter(sRouterName="Router")
-{
-	sRouterName = 
+//function createRouter(sRouterName="Router")
+//{
+	//sRouterName = 
+	var Router = 
 	{
 		routes: [],
 		mode: null,
@@ -115,8 +117,8 @@ function createRouter(sRouterName="Router")
 			return this;
 		}
 	};
-	return sRouterName;
-}
+	//return sRouterName;
+//}
 
 
 

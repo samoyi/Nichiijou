@@ -4,29 +4,28 @@
 <title>22</title>
 </head>
 <body>
-
+<input type="button" id="default" value="default" />
+<input type="button" id="about" value="about" />
 </body>
 <script src="Front-end_Router_Object.js"></script>
 <script>
 "use strict";
 
+let Router = createRouter();
+
+
 // configuration
 Router.config({mode: 'history'});
 
 // returning the user to the initial state
-setTimeout(function()
-{
+
 	//Router.navigate();
 
 	// adding routes
 	Router
-		.add(/about/, function ()
+		.add(/about1/, function ()
 		{
 			console.log('page about');
-		})
-		.add(/hehe/, function ()
-		{
-			console.log('page hehe');
 		})
 		.add(/products\/(.*)\/edit\/(.*)/, function ()
 		{
@@ -36,13 +35,25 @@ setTimeout(function()
 		{
 			console.log('page default');
 		})
-		.check('/products/12/edit/22').listen().remove(/hehe/).flush;
+		.listen()
+		.remove(/hehe/).flush;
 
 
 	// forwarding
-	Router.navigate('/about');
-	Router.navigate('/hehe');
-}, 1000);
+	document.querySelector("#default").addEventListener("click", function()
+	{
+		Router.navigate('/default').check();
+	}, false);
+	document.querySelector("#about").addEventListener("click", function()
+	{
+		Router.navigate('about1').check();
+	}, false);
+	
+
+
+
+
+
 
 </script>
 </html>
