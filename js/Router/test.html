@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>22</title>
+</head>
+<body>
+<p>
+	<input type="button" id="default" value="default" />
+	<input type="button" id="about" value="about" />
+</p>
+<p>
+	<input type="button" id="page1" value="page1" />
+	<input type="button" id="page2" value="page2" />
+</p>
+</body>
+<script src="Front-end_Router_Object.js"></script>
+<script>
+"use strict";
+
+let Router = createRouter();
+let Router1 = createRouter();
+
+Router.config({mode: 'history'});
+Router1.config({mode: 'hash'});
+
+
+Router
+	.add(/about/, function ()
+	{
+		console.log('page about');
+	})
+	.add(function ()
+	{
+		console.log('page default');
+	})
+	.listen();
+Router1
+	.add(/page1/, function ()
+	{
+		console.log('page1');
+	})
+	.add(/page2/, function ()
+	{
+		console.log('page2');
+	})
+	.listen();
+
+
+	
+document.querySelector("#default").addEventListener("click", function()
+{
+	Router.navigate('/default').check();
+}, false);
+document.querySelector("#about").addEventListener("click", function()
+{
+	Router.navigate('about').check();
+}, false);
+
+document.querySelector("#page1").addEventListener("click", function()
+{
+	Router1.navigate('page1').check();
+}, false);
+document.querySelector("#page2").addEventListener("click", function()
+{
+	Router1.navigate('page2').check();
+}, false);
+	
+	
+
+
+
+</script>
+</html>

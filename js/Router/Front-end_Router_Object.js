@@ -2,10 +2,9 @@
  * 修改自 http://krasimirtsonev.com/blog/article/A-modern-JavaScript-router-in-100-lines-history-api-pushState-hash-url	
  */
 
-function createRouter(sRouterName="Router")
+function createRouter()
 {
-	sRouterName = 
-	{
+	return {
 		routes: [],
 		mode: null,
 		root: '/',
@@ -115,7 +114,6 @@ function createRouter(sRouterName="Router")
 			return this;
 		}
 	};
-	return sRouterName;
 }
 
 

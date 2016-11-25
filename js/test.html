@@ -23,13 +23,17 @@ document.querySelector("#forward").addEventListener("click", function()
 window.addEventListener("popstate", function(ev)
 {
 	console.log(ev.state);
-	alert(ev.state);
+	//alert(ev.state);
 }, false);
 
 console.log(location.href);
 	
 var stateObj = 666;
-history.pushState(stateObj, "page2", "#66");
+setTimeout(function()
+{	alert();
+	history.pushState(stateObj, "page2", "#233333");
+}, 3000);
+
 
 console.log(location.href);
 
