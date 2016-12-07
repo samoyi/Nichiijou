@@ -7,35 +7,14 @@
 <a href="test1.html">111</a>
 <input id="forward" type="button" value="前进" />
 </body>
-<script src="Nichijou_History.js"></script>
+<script src="Nichijou_Math.js"></script>
 <script>
 "use strict";
-/*
-let NH = new Nichijou_History();
 
-document.querySelector("#forward").addEventListener("click", function()
-{
-	alert(NH.length);
-	NH.go(1);
-}, false);
-*/
-
-window.addEventListener("popstate", function(ev)
-{
-	console.log(ev.state);
-	//alert(ev.state);
-}, false);
-
-console.log(location.href);
-	
-var stateObj = 666;
-setTimeout(function()
-{	alert();
-	history.pushState(stateObj, "page2", "#233333");
-}, 3000);
+let NM = new Nichijou_Math();
+console.log( NM.num2ComputerRadix(1452649973*8) );
 
 
-console.log(location.href);
 
 	
 
