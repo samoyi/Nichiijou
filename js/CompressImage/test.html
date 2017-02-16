@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>samoyi</title>
+<style>
+	#test{
+		display: none;
+	}
+</style>
+</head>
+<body>
+<input type="file" id="fileImg" >
+http://www.gbtags.com/gb/share/2991.htm
+<form>
+	<img src="" id="test" alt="">
+</form>
+</body>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="test.js"></script>
+<script>
+"use strict";
+
+function handleFileSelect (evt) 
+{
+	var files = evt.target.files;
+	for (var i = 0, f; f = files[i]; i++) 
+	{
+
+		// Only process image files.
+		if (!f.type.match('image.*')) {
+			continue;
+		}
+
+		var reader = new FileReader();
+
+		// Closure to capture the file information.
+		reader.onload = (function(theFile) {
+			return function(e) {
+				//console.log(e.target.result);
+				var xhr = new XMLHttpRequest();
+				xhr.addEventListener('readystatechange', function()
+				{
+					if (xhr.readyState == 4)
+					{
+						if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)
+						{
+							//console.log(xhr.responseText);
+						}
+						else
+						{
+
+						}
+					}
+				}, false);
+				xhr.open("post", "test.php", true);
+				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				var data = "file_base64=" + encodeURIComponent(e.target.result.split(',')[1]);
+				xhr.send(data);
+			
+			
+				var i = document.getElementById("test");
+				i.src = event.target.result;
+				$(i).css('width',$(i).width()/10+'px');
+				var quality = 50;
+				i.src = jic.compress(i,quality).src;
+				i.style.display = "block";
+			};
+		})(f);
+
+		// Read in the image file as a data URL.
+		reader.readAsDataURL(f);
+	}
+}
+ 
+document.getElementById('fileImg').addEventListener('change', handleFileSelect, false);
+
+</script>
+</html>
