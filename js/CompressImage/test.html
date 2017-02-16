@@ -38,7 +38,7 @@ function handleFileSelect (ev)
 				i.src = event.target.result;
 
 				// 根据图片大小按照不同比例进行压缩
-				if( theFile.size>524288 ){
+				if( theFile.size>524288 ){ 
 					//var quality = 50;
 					var quality = 100/(theFile.size/524288);
 					console.log(quality);
