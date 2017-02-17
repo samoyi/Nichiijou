@@ -21,13 +21,14 @@ http://www.gbtags.com/gb/share/2991.htm
 function handleFileSelect (ev) 
 {
 	var files = ev.target.files;
-	for (var i = 0, f; f = files[i]; i++) 
-	{
-
+	console.log( files );
+	//for (var i = 0, f; f = files[i]; i++) 
+	//{
+		var f = files[0];
 		// Only process image files.
-		if (!f.type.match('image.*')) {
-			continue;
-		}
+		//if (!f.type.match('image.*')) {
+		//	continue;
+		//}
 
 		var reader = new FileReader();
 
@@ -35,19 +36,20 @@ function handleFileSelect (ev)
 		reader.onload = (function(theFile) {
 			return function(e) {
 				var i = document.getElementById("displayImage");
-				i.src = event.target.result;
+				i.src = e.target.result;
 
 				// 根据图片大小按照不同比例进行压缩
+
 				if( theFile.size>524288 ){ 
 					//var quality = 50;
 					var quality = 100/(theFile.size/524288);
-					console.log(quality);
+
 					var newImg = jic.compress(i,quality);
 				}
 				else{
-					var newImg = theFile;
+					var newImg = {};
+					newImg.src = e.target.result;
 				}
-				
 				
 				
 				var xhr = new XMLHttpRequest();
@@ -56,7 +58,7 @@ function handleFileSelect (ev)
 					if (xhr.readyState == 4)
 					{
 						if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
-							//console.log(xhr.responseText);
+							console.log(xhr.responseText);
 						}
 						else{
 							throw new Error("Fail to send compressed image");
@@ -75,7 +77,7 @@ function handleFileSelect (ev)
 
 		// Read in the image file as a data URL.
 		reader.readAsDataURL(f);
-	}
+	//}
 }
  
 document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
