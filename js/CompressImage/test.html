@@ -3,84 +3,26 @@
 <head>
 <meta charset="utf-8">
 <title>samoyi</title>
-<style>
-	#displayImage{
-		display: none;
-	}
-</style>
 </head>
 <body>
 <input type="file" id="selectImage" >
 http://www.gbtags.com/gb/share/2991.htm
-<img src="" id="displayImage" alt="">
+<img src="" id="preview" />
 </body>
-<script type="text/javascript" src="test.js"></script>
+<script src="test.js"></script>
 <script>
 "use strict";
 
-function handleFileSelect (ev) 
+function callback( sCompressedImageUrl )
 {
-	var files = ev.target.files;
-	console.log( files );
-	//for (var i = 0, f; f = files[i]; i++) 
-	//{
-		var f = files[0];
-		// Only process image files.
-		//if (!f.type.match('image.*')) {
-		//	continue;
-		//}
-
-		var reader = new FileReader();
-
-		// Closure to capture the file information.
-		reader.onload = (function(theFile) {
-			return function(e) {
-				var i = document.getElementById("displayImage");
-				i.src = e.target.result;
-
-				// 根据图片大小按照不同比例进行压缩
-
-				if( theFile.size>524288 ){ 
-					//var quality = 50;
-					var quality = 100/(theFile.size/524288);
-
-					var newImg = jic.compress(i,quality);
-				}
-				else{
-					var newImg = {};
-					newImg.src = e.target.result;
-				}
-				
-				
-				var xhr = new XMLHttpRequest();
-				xhr.addEventListener('readystatechange', function()
-				{
-					if (xhr.readyState == 4)
-					{
-						if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
-							console.log(xhr.responseText);
-						}
-						else{
-							throw new Error("Fail to send compressed image");
-						}
-					}
-				}, false);
-				xhr.open("post", "test.php", true);
-				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				var data = "file_base64=" + encodeURIComponent(newImg.src.split(',')[1]);
-				xhr.send(data);
-				
-				i.src = newImg.src;
-				i.style.display = "block";
-			};
-		})(f);
-
-		// Read in the image file as a data URL.
-		reader.readAsDataURL(f);
-	//}
+	var oPreview = document.getElementById("preview");
+	oPreview.src = sCompressedImageUrl;
 }
  
-document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
+document.getElementById('selectImage').addEventListener('change', function(ev){
+	
+	handleFileSelect("test.php", callback, ev);
+}, false);
 
 </script>
 </html>
