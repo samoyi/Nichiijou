@@ -73,7 +73,11 @@ function getImageDataURI(source_img_node, quality, output_format="image/png")
 
 //  example
 let img = document.getElementById("img");
-img.crossOrigin = "Anonymous";
+/*
+ *	如果是跨域请求，需要按照如下设置crossOrigin属性，并在服务器端对被请求图片设置CORS
+ *  参考 https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+ */
+// img.crossOrigin = "Anonymous"; 
 img.addEventListener("load", function()
 {	
 	console.log( getImageDataURI(img)[0]);
