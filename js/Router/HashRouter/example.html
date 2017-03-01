@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>location.hash方式的前端路由</title>
+<style>
+.container>div
+{
+	border: solid; margin-bottom: 1em;
+}
+.content
+{
+	padding: 1em; font-size: 2em;
+}
+</style>
+</head>
+<body>
+<h1>location.hash方式的前端路由</h1>
+<div class="container">
+	<h2>示例</h2>
+	<div>
+		<h3>链接区域</h3>
+		<nav class="mainMenu"> 
+			<ul> 
+				<li><a href="#">#（首页）</a></li> 
+				<li><a href="#page#1">#page#1</a></li> 
+				<li><a href="#page2">#page2</a></li> 
+				<li><a href="#page3">#page3</a></li> 
+				<li><a href="#page4">#page4</a></li> 
+			</ul> 
+			<ul>
+				<li><a href="#">另一个 #（首页）</a></li> 
+				<li><a href="#page2">另一个 #page2</a></li> 
+			</ul>
+		</nav> 
+	</div>
+	<div>
+		<h3>内容变化区域</h3>
+		<div class="content"></div> 
+	</div>
+</div>
+</body>
+<script src="HashRouter.js"></script>
+<script>
+"use strict";
+
+// 加载不同页面的内容
+function loadContent ( text ) 
+{ 
+	let content = document.querySelector('.content'); 
+	content.innerHTML = text; 
+} 
+
+let aHash = ['#', '#page#1', '#page2', '#page3', '#page4'], // 所有（不含重复）需要进行路由的hash
+	callbacks = [  // 相应hash路由一一对应的页面更新动作
+		function () { loadContent('#首页') },
+		function () { loadContent('#page#1页面内容') },
+		function () { loadContent('#page2页面内容') },
+		function () { loadContent('#page3页面内容') },
+		function () { loadContent('#page4页面内容') }
+	];
+
+addHashRouter(aHash, callbacks);
+
+</script>
+</html>
