@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body>
+<h1>使用FileReader.readAsDataURL()获得上传文件的DataURI编码</h1>
+<p>选择文件后查看console。文件越大生成时间越长。</p>
+<input type="file" id="chooseFile" />
+</body>
+<script>
+"use strict";
+
+document.querySelector("#chooseFile").addEventListener("change", function(ev)
+{
+	let fileReader = new FileReader();
+	fileReader.addEventListener("load", function(ev)
+	{
+		console.log( ev.target.result );
+	});
+	fileReader.readAsDataURL( ev.target.files[0] );
+});
+
+</script>
+</html>

@@ -6,7 +6,8 @@
 </head>
 <body>
 <h1>使用HTMLCanvasElement.toDataURL()获得图片的DataURI编码</h1>
-<p style="font-weight: bolder; color: red;">ES6</p>
+<p>查看console</p>
+<p style="font-weight: bold; color: red;">使用该方法会增加DataURI数据量。但也可以通过降低图片质量来减少DataURI数据量</p>
 <img src="test.jpg" alt="" id="img" />
 </body>
 <script>
@@ -29,9 +30,8 @@
  *    * output_format参数为"image/webp"时，则转化为DataURI之后的类型为webp
  *
  *
- *  返回值：一个两项数组
- *    1. 第一项是toDataURL()方法的返回值，可以作为图片地址直接使用
- *    2. 第二项是其中的base64编码部分
+ *  返回值：图片的DataURI
+ *
  */
 
 function getImageDataURI(source_img_node, quality, output_format="image/png")
@@ -63,9 +63,7 @@ function getImageDataURI(source_img_node, quality, output_format="image/png")
 	cvs.width = source_img_node.naturalWidth;
 	cvs.height = source_img_node.naturalHeight;
 	var ctx = cvs.getContext("2d").drawImage(source_img_node, 0, 0);
-	var newImageData = cvs.toDataURL(output_format, quality);
-
-	return [newImageData, newImageData.split(',')[1]];
+	return cvs.toDataURL(output_format, quality);
 }
 
 
@@ -79,8 +77,7 @@ let img = document.getElementById("img");
 // img.crossOrigin = "Anonymous"; 
 img.addEventListener("load", function()
 {	
-	console.log( getImageDataURI(img)[0]);
-	console.log( getImageDataURI(img)[1] );
+	console.log( getImageDataURI(img));
 });
 
 
