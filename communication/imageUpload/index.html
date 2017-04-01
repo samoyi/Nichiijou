@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>文件上传并保存</title>
+</head>
+<body>
+
+    <h1>文件上传并保存</h1>
+    
+    <input id="imageUploader" type="file" />
+	<input id="submit" type="button" value="upload" />
+
+</body>
+<script>
+
+{	
+	
+	const aMIMEType = ["image/jpeg", "image/png"]; //  这里限定只能上传 jpg和png图片 文件
+	const nMaxByte = 1024*1024*2; // 限定最大不超过2MB
+	
+	
+	
+	let oImageUploader = document.querySelector("#imageUploader");
+	
+	let formData = new FormData();
+	
+	oImageUploader.addEventListener("change", function()
+	{
+		// 选择文件后获得文件信息
+		let oSelectedFile = (this.files)[0];
+		
+		// 检查是否是允许的类型
+		if( aMIMEType.indexOf( oSelectedFile.type )<0 )
+		{
+			alert("选择图片类型错误");
+			return;
+		}
+		
+		// 检查文件大小是否超过限制
+		if( oSelectedFile.size>nMaxByte )
+		{
+			alert("所选图片超过2MB");
+			return;
+		}
+
+		formData.append("file", oSelectedFile );
+	});
+	
+	document.querySelector("#submit").addEventListener("click", function()
+	{
+		if( !formData.has("file") )
+		{
+			alert("没有选择图片");
+			return;
+		}
+		
+		let xhr = new XMLHttpRequest();
+		xhr.addEventListener('readystatechange', function()
+		{
+			if (xhr.readyState == 4)
+			{
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)
+				{
+					let sRes = xhr.responseText.trim();
+					console.log( JSON.parse(sRes) );
+				}
+				else
+				{
+					alert( "上传失败" );
+				}
+			}
+		}, false);
+		xhr.open("post", "handleUpload.php", true);
+		xhr.send(formData);
+	});
+}	
+
+</script>
+
+
+
+</html>
