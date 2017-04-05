@@ -30,7 +30,9 @@
 			}
 			else
 			{
-				$type = explode("/", $file["type"])[1];
+				// PHP 5.4 以降では、関数やメソッドの返す結果を直接配列として扱えるようになりました。 以前は、いったん一次変数に代入しないと配列としては扱えませんでした。
+				$temp_arr = explode("/", $file["type"]);
+				$type = $temp_arr[1];
 				$basename = basename($file["name"]);
 				
 
