@@ -4,20 +4,37 @@
 <title></title>
 </head>
 <body>
-<input id="back" type="button" value="后退" />
 </body>
-<script src="Nichijou_History.js"></script>
 <script>
 "use strict";
 
-let NH = new Nichijou_History();
-/*
-document.querySelector("#back").addEventListener("click", function()
+function createNonReplicativeInt(nMin, nMax, nNum)
 {
-	alert(NH.length);
-	NH.length  = 2233;
-	NH.go(-1);
-}, false);
-*/
+    /*
+        TODO
+        验证三个是否都是整数
+        验证 nMax 是否大于 nMin
+        验证 nNum > nMax-nMin+1
+    */
+
+
+	let aResult = [];
+
+	let nCreated = 0;
+	while( nCreated < nNum )
+	{
+		var nRan = Math.floor( Math.random()*(nMax-nMin+1)+nMin );
+		if( aResult.indexOf(nRan)<0 )
+		{
+			aResult.push(nRan);
+            nCreated++;
+		}
+	}
+
+	return aResult;
+}
+
+console.log( createNonReplicativeInt(5, 10, 4) );
+
 </script>
 </html>
