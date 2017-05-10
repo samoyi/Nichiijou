@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>JSONP Demo</title>
+</head>
+<body>
+</body>
+<script>
+	/*
+     * 标准的JSONP，你要先定义一个函数
+	 * 这个函数的参数是接收到的请求数据
+	 * 这个数据可以是对象，也可以是其他任何类型
+	 * 通过在customJSONPCallback中使用该参数，就可以获取数据
+	 */
+	function customJSONPCallback(info){
+		console.log( info );
+	}
+</script>
+<!--
+	你通过script向服务器发起请求
+	通过你和服务器约定好的jsonp参数来告诉它你想要什么东西
+	通过funcName参数来告诉服务器你用来接收数据的函数名
+	服务器会直接返回customJSONPCallback的函数调用
+-->
+<script src="cross-origin.php?jsonp=info&funcName=customJSONPCallback"></script>
+<!--
+	除了上面标准的JSONP，其实你可以让服务器返回任何JS代码执行
+	下面两个请求服务器分别返回了JSONP_Name和JSONP_Age这两个变量的定义
+	这样你可以直接使用这两个变量。
+	但实际中不应该这样定义全局变量。
+-->
+<script src="cross-origin.php?jsonp=name"></script>
+<script src="cross-origin.php?jsonp=age"></script>
+<script>
+	console.log( "姓名：" + JSONP_Name);
+	console.log( "年龄：" + JSONP_Age);
+</script>
+<!--
+	下面这个请求因为使用了服务器没有指定的参数值，
+	所以服务器会返回一个错误抛出
+-->
+<script src="cross-origin.php?jsonp=xxx"></script>
+</html>
