@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>long polling</title>
+</head>
+<body>
+</body>
+<script>
+"use strict";
+
+// JS里还是一个正常的请求
+let xhr = new XMLHttpRequest();
+xhr.addEventListener("readystatechange", function()
+{
+	if( xhr.readyState === 4 )
+	{
+		if( (xhr.status>=200 && xhr.status<300) || xhr.status===304 )
+		{
+			// 根据返回的结果，你可以处理数据或者在进行一次长轮询
+			console.log( this.responseText );
+		}
+	}
+});
+xhr.open("GET", "test.php", true);
+xhr.send();
+
+
+</script>
+</html>
