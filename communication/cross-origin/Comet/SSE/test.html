@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>aaa</title>
+</head>
+<body>
+</body>
+<script>
+"use strict";
+
+let evtSource = new EventSource("test.php" ); // create a new EventSource object to instantiated your event source
+
+evtSource.onopen = function() // listen the open connection event
+{ 
+	//console.log( "open a connection" );
+};
+
+evtSource.addEventListener("ping", function(e) // listen message received by event field
+{
+	let obj = JSON.parse(e.data);
+	//console.log( "ping at " + obj.time );
+}, false);
+
+evtSource.onmessage = function(e) // listen message received by data field 
+{ 
+	//console.log( "message: " + e.data );
+	console.log( e.data );
+	//console.log("\n\n");
+	//evtSource.close();
+};
+
+evtSource.onerror = function(e) // listen the error event
+{ 
+	console.log( "error" );
+};
+
+setTimeout(function()
+{
+	//evtSource.close(); // close the connection
+	//console.log( "connection close" );
+}, 12000);
+
+
+
+</script>
+</html>
