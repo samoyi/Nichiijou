@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>long polling</title>
+</head>
+<body>
+</body>
+<script>
+"use strict";
+
+
+let xhr = new XMLHttpRequest();
+
+let sRes = "",
+	nReceived = 0,
+	sResult = "";
+	
+xhr.addEventListener("readystatechange", function()
+{
+	if( xhr.readyState === 3 )
+	{
+		// 关于这里过滤空格返回值的情况，参考php文件中的说明
+		if( sRes = xhr.responseText.trim() )
+		{
+			sResult = sRes.substring(nReceived);
+			nReceived += sResult.length;
+			console.log( sResult );
+		}
+	}
+	else if( xhr.readyState === 4 )
+	{
+			console.log( 'over' );
+	}
+});
+xhr.open("GET", "test.php", true);
+xhr.send();
+
+		
+
+</script>
+</html>
