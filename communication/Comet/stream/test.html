@@ -25,18 +25,25 @@ xhr.addEventListener("readystatechange", function()
 		{
 			sResult = sRes.substring(nReceived);
 			nReceived += sResult.length;
-			console.log( sResult );
+			/* 
+			 * 后端结束输出后，前端会连续发生两次readystatechange事件。
+			 * readyState分别为3和4。这一次readyState为3的readystatechange事件
+			 * 会接收到和上一次相同的数据，所以sResult会是一个空字符串
+			 */
+			if( sResult ){
+				console.log( sResult );
+			}	
 		}
 	}
 	else if( xhr.readyState === 4 )
 	{
-			console.log( 'over' );
+		console.log( 'over' );
 	}
 });
 xhr.open("GET", "test.php", true);
 xhr.send();
 
-		
+
 
 </script>
 </html>

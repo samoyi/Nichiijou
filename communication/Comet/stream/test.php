@@ -12,15 +12,16 @@
 	$i = 0;
 	while( $i<10 )
 	{  
+		echo $i++;
+		
 		/*
 		 * 关于下面两个函数必须同时使用的情况，
 		 * 参考 http://php.net/manual/en/function.flush.php
 		 */
 		ob_flush();
 		flush();
-		echo $i;
+		
 		sleep(1);
-		$i++;
 	}
 	
 ?>

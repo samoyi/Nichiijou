@@ -2,23 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>aaa</title>
+<title>SSE</title>
 </head>
 <body>
 </body>
 <script>
 "use strict";
 
+
 let evtSource = new EventSource("test.php" ); // create a new EventSource object to instantiated your event source
 
-evtSource.onmessage = function(ev)
-{
-	console.log( ev );
-};
-/*
 evtSource.onopen = function() // listen the open connection event
 { 
-	console.log( "open a connection" );
+	console.log( "open a connection\n\n" );
 };
 
 evtSource.addEventListener("ping", function(e) // listen message received by event field
@@ -29,19 +25,19 @@ evtSource.addEventListener("ping", function(e) // listen message received by eve
 
 evtSource.onmessage = function(e) // listen message received by data field 
 { 
-	console.log( "message: " + e.data );
+	console.log( "message: " + e.data + "\n\n" );
 };
 
 evtSource.onerror = function(e) // listen the error event
 { 
 	console.log( "error" );
 };
-*/
 
 setTimeout(function()
 {
 	evtSource.close(); // close the connection
-}, 12000);
+	console.log( "connection close" );
+}, 15000);
 
 
 
