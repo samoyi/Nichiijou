@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SSE-Emulation</title>
+</head>
+<body>
+</body>
+<script src="SSE-Emulation.js"></script>
+<script>
+"use strict";
+
+let eventSource1 = new EventSource1("test.php");
+eventSource1.onmessage = function(ev){
+	console.log(ev); // FIXME  type 为什么总是ping？
+};
+
+</script>
+</html>
