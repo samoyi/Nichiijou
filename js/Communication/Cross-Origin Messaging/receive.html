@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<p>This page must be in domain of www.receiveDomain.com<p>
+</body>
+<script>
+"use strict";
+
+	const SEND_ORIGIN = "http://www.sendDomain.com"; // expected origin, use default port
+
+	window.addEventListener("message", handleMessage, false); // receive message
+	function handleMessage(event)
+	{
+	  // Check if the event.origin is expected
+	  if (event.origin === SEND_ORIGIN){
+		// If expect same-origin message, you could check event.source
+		let data = event.data;
+		document.body.innerHTML = "name: " + data.name + "<br />age: " + data.age + "<br />stamp: " + data.stamp;
+
+		event.source.postMessage("copy that", event.origin); // reply
+	  }
+	}
+
+
+</script>
+</html>
