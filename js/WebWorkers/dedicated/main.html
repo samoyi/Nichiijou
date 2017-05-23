@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+</body>
+<script>
+"use strict";
+
+let worker = new Worker("Worker.js" ),
+    num = 45;
+
+worker.onmessage = function(event){
+    let nResult = event.data;
+    console.log( nResult );
+}
+
+worker.onerror = function(event){
+    console.error("ERROR: " + event.filename + " (line " + event.lineno + "): " +
+                event.message);
+
+    //在某些浏览器中，return false 会阻止浏览器本身的错误抛出
+    //return false;
+};
+
+worker.postMessage( num );
+
+
+// 立刻输出，不会被耗时的计算阻塞
+console.log("continue");
+
+
+
+</script>
+</html>

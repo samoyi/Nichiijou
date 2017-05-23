@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>46</title>
+</head>
+<body>
+</body>
+<script>
+"use strict";
+
+var myWorker = new SharedWorker('worker.js?'+Math.random());
+
+myWorker.port.start();
+myWorker.port.postMessage(46);
+
+myWorker.port.addEventListener("message", function(ev) {
+    console.log(ev.data);
+});
+
+myWorker.onerror = function(event){
+    console.error("ERROR: " + event.filename + " (line " + event.lineno + "): " +
+                event.message);
+};
+
+</script>
+</html>
