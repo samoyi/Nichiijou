@@ -17,11 +17,12 @@
 <script>
 "use strict";
 
-let Router = createRouter();
-let Router1 = createRouter();
 
-Router.config({mode: 'history'});
-Router1.config({mode: 'hash'});
+let Router = createRouter();
+// let Router1 = createRouter();
+
+Router.config({mode: 'history', root: 'gits/Nichijou/js/Router/Front-end_Router_Object'});
+// Router1.config({mode: 'hash'});
 
 
 Router
@@ -34,6 +35,8 @@ Router
 		console.log('page default');
 	})
 	.listen();
+
+/*	
 Router1
 	.add(/page1/, function ()
 	{
@@ -44,7 +47,7 @@ Router1
 		console.log('page2');
 	})
 	.listen();
-
+*/
 
 	
 document.querySelector("#default").addEventListener("click", function()
@@ -53,9 +56,10 @@ document.querySelector("#default").addEventListener("click", function()
 }, false);
 document.querySelector("#about").addEventListener("click", function()
 {
-	Router.navigate('about').check();
+	Router.navigate('about.html').check();
 }, false);
 
+/*
 document.querySelector("#page1").addEventListener("click", function()
 {
 	Router1.navigate('page1').check();
@@ -64,7 +68,7 @@ document.querySelector("#page2").addEventListener("click", function()
 {
 	Router1.navigate('page2').check();
 }, false);
-	
+	*/
 	
 
 
