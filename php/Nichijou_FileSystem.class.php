@@ -39,7 +39,6 @@ class Nichijou_FileSystem
 	public function indexFiles($src, $aIgnore=array())
 	{
 		$dir = opendir($src); 
-        @mkdir($dest); 
 		
 		$oldName = array();
 		$index = 0;
@@ -54,6 +53,22 @@ class Nichijou_FileSystem
             } 
         } 
         closedir( $dir ); 
+		return $oldName;
+	}
+	
+	// 批量获得文件的文件名 参数同indexFiles方法
+	public function getFilesName($src, $aIgnore=array()){
+		
+		$dir = opendir($src); 
+		
+		$names = array();
+		while(false !== ( $file = readdir($dir)) ) 
+        { 	
+            if( ( $file != '.' ) && ( $file != '..' ) && is_file($src.'/'.$file) && !in_array($file, $aIgnore) ) 
+            { 
+				$oldName[] = pathinfo($file, PATHINFO_FILENAME );
+            } 
+        } 
 		return $oldName;
 	}
 }
