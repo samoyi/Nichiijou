@@ -6,6 +6,7 @@
 		if (xhr.readyState == 4)
 		{
 			if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+
 				let BuiltInGlobalVariables = JSON.parse( xhr.responseText.trim() );
 
 				let aAllGlobalVariables = Reflect.ownKeys( window ); // 包括window属性和全局变量
@@ -24,7 +25,3 @@
 	xhr.open("get", "GlobalVarChecker/BuiltInGlobalVariables.json?"+Math.random(), true);
 	xhr.send(null);
 }
-
-
-
-

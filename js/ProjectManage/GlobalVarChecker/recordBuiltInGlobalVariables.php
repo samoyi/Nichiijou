@@ -1,10 +1,8 @@
 <?php
 
-
-	if( isset($_POST['bigv']) )
-	{
-		file_put_contents('BuiltInGlobalVariables.json', $_POST['bigv']);
-	}
+if( isset($_POST['bigv']) ){
+	file_put_contents('BuiltInGlobalVariables.json', $_POST['bigv']);
+}
 
 ?>
 <!DOCTYPE html>
@@ -20,9 +18,9 @@
 "use strict";
 
 {
-	
-	let aAllPropKeys = Reflect.ownKeys( window ); // window自身的所有属性，不管是属性名是Symbol或字符串，也不管是否可枚举。 
-	
+
+	let aAllPropKeys = Reflect.ownKeys( window ); // window自身的所有属性，不管是属性名是Symbol或字符串，也不管是否可枚举。
+
 	let xhr = new XMLHttpRequest();
 	xhr.addEventListener('readystatechange', function()
 	{
@@ -41,6 +39,6 @@
 	xhr.send( "bigv=" + JSON.stringify(aAllPropKeys) );
 
 }
-	
+
 </script>
 </html>
