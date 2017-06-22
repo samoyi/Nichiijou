@@ -30,18 +30,20 @@ class Nichijou_FileSystem
     }   
 
 		
-	// 将文件按照从0开始的整数序号重命名	
+	// 将文件按照整数序号重命名	
 	/*
 	 * @ para $src      对该路径下的文件进行重命名
+	 * @ para $index    默认从0开始，也可以重新设定一个起点
 	 * @ para $aIgnore  该数组中的文件将被忽略，不进行重命名
 	 * @ return         原来名字组成的数组，数组index是现在的名字
+	 * 
+	 * 如果指定的目录下有隐藏文件，则隐藏文件也会被重命名
 	 */
-	public function indexFiles($src, $aIgnore=array())
+	public function indexFiles($src, $index=0, $aIgnore=array())
 	{
 		$dir = opendir($src); 
 		
 		$oldName = array();
-		$index = 0;
 		
         while(false !== ( $file = readdir($dir)) ) 
         { 	
