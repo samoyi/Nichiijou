@@ -53,7 +53,7 @@ function AJAX_POST(sURL, data, fnSuccessCallback, fnFailCallback)
 	}, false);
 	xhr.open("post", sURL, true);
 	// 如果发送FormDate，则不需要设置Content-Type，但截至2017.5，FormDate的浏览器支持并不理想
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-sURLencoded");
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	xhr.send(data);
 }
 
