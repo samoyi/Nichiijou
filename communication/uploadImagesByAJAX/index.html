@@ -61,17 +61,14 @@
 			alert('没有选择图片');
 			return;
 		}
-        if( aImageAmount>1 ){
+        if( aImageAmount>10 ){
             alert('一次最多选择10张图片');
-            // empty selected files
-            console.log([...formData.keys()].length);
-            for(var key of formData.keys()){
-                console.log(key);
+            [...formData.keys()].forEach((key)=>{
                 formData.delete(key);
-            }
-            console.log([...formData.keys()].length);
+            });
+            return;
         }
-// return;
+
         // if has any available image
 
 		let xhr = new XMLHttpRequest();
@@ -88,9 +85,9 @@
                     else{
                         alert('上传成功');
                         // empty selected files
-                        for(let key of formData.keys()){
+                        [...formData.keys()].forEach((key)=>{
                             formData.delete(key);
-                        }
+                        });
                     }
 				}
 				else
