@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>图片上传并保存</title>
+</head>
+<body>
+    <h1>图片上传并保存</h1>
+
+    <h2>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">兼容性较差</a>
+    </h2>
+    <input id='imageUploader' type='file' multiple="multiple" />
+	<input id='submit' type='button' value='upload' />
+
+</body>
+<script>
+'use strict';
+
+{
+
+	const aMIMEType = ['image/jpeg', 'image/png']; // 这里限定只能上传 jpg和png图片 文件
+	const nMaxByte = 1024*1024*2; // 限定最大不超过2MB
+
+	let oImageUploader = document.querySelector('#imageUploader');
+
+	let formData = new FormData();
+
+    // check if a selected file is available
+    function checkSelected(file){
+
+		if( !aMIMEType.includes( file.type ) )
+		{
+			alert( file.name + ' 类型错误。只支持jpg和png' );
+			return;
+		}
+
+		if( file.size>nMaxByte )
+		{
+			alert( file.name + ' 大小超过2MB' );
+			return;
+		}
+
+        return true;
+    }
+
+    // handle selection
+	oImageUploader.addEventListener('change', function()
+	{
+        [...this.files].forEach((file)=>{
+            if( checkSelected(file) ){
+                formData.append(file.name, file );
+            }
+        });
+	});
+
+	document.querySelector('#submit').addEventListener('click', function()
+	{
+        let aImageAmount = [...formData.keys()].length;
+		if( aImageAmount === 0 ){
+			alert('没有选择图片');
+			return;
+		}
+        if( aImageAmount>1 ){
+            alert('一次最多选择10张图片');
+            // empty selected files
+            console.log([...formData.keys()].length);
+            for(var key of formData.keys()){
+                console.log(key);
+                formData.delete(key);
+            }
+            console.log([...formData.keys()].length);
+        }
+// return;
+        // if has any available image
+
+		let xhr = new XMLHttpRequest();
+		xhr.addEventListener('readystatechange', function()
+		{
+			if (xhr.readyState == 4)
+			{
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)
+				{
+					let oRes = JSON.parse(xhr.responseText.trim());
+                    if(oRes.error){
+                        alert( JSON.stringify(oRes, null, 2)+ '\n上传失败。' );
+                    }
+                    else{
+                        alert('上传成功');
+                        // empty selected files
+                        for(let key of formData.keys()){
+                            formData.delete(key);
+                        }
+                    }
+				}
+				else
+				{
+					alert( xhr.status + ' 上传失败。' );
+				}
+			}
+		}, false);
+		xhr.open('post', 'handleUpload.php', true);
+		xhr.send(formData);
+	});
+}
+
+</script>
+</html>
