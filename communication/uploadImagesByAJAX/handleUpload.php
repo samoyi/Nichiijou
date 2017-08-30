@@ -13,7 +13,7 @@ if( sizeof($_FILES) ){
 	);
 
 	foreach( $_FILES as $name=>$file){
-
+		file_put_contents('err.txt', json_encode($file));
 		if( !in_array( $file['type'], $aMIMEType ) ){
 			$res[$name] = array(
 				'err'=> 'file type'

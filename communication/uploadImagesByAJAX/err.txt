@@ -1,0 +1,1 @@
+{"name":"1.png","type":"image\/png","tmp_name":"C:\\Windows\\phpD198.tmp","error":0,"size":14222}
