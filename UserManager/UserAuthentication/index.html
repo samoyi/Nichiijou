@@ -1,0 +1,37 @@
+<section>
+    sign up
+    <form action='register.php' method='post'>
+        <input type='email' name='email' required='required' placeholder='email' />
+        <input type='text' name='username' required='required' placeholder='user' />
+        <input type='password' name='password' required='required' placeholder='password' />
+        <input type='password' name='password_confirmation' required='required' placeholder='confirm password' />
+        <input type='submit' value='sign up' />
+    </form>
+</section>
+
+<section>
+    log in
+    <form action='login.php' method='post'>
+        <input type='text' name='username' required='required' placeholder='user' />
+        <input type='password' name='password' required='required' placeholder='password' />
+        <input type='submit' value='log in' />
+    </form>
+</section>
+
+<section>
+    change password
+    <form action='change_password.php' method='post'>
+        <input type='password' name='old_password' required='required' placeholder='old_password' />
+        <input type='password' name='new_password' required='required' placeholder='new_password' />
+        <input type='password' name='password_confirmation' required='required' placeholder='confirm password' />
+        <input type='submit' value='change' />
+    </form>
+</section>
+
+<section>
+    forgot password
+    <form action='forgot_password.php' method='post'>
+        <input type='email' name='email' required='required' placeholder='email' />
+        <input type='submit' value='' />
+    </form>
+</section>
