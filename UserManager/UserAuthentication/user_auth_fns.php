@@ -19,19 +19,19 @@
             throw new Exception('That username is taken. Go back and choose another one.');
         }
 
-        $result = $dbr->query("INSERT INTO user VALUES ('" .$username. "', sha1('" .$password. "'), '" .$email. "')");
+        $result = $dbr->query('INSERT INTO user VALUES ("' .$username. '", "' .sha1($password). '", "' .$email. '", "", "")');
         if( !$result ){
             throw new Exception('Could not register you in database. Please try again later.');
         }
 
+        $dbr->close();
         return true;
     }
 
-
     function login($username, $password){
         $dbr = db_connect();
-
-        $result = $dbr->query("SELECT * FROM user WHERE username='" .$username. "' AND password = sha1('" .$password. "')");
+        $result = $dbr->query('SELECT * FROM user WHERE username="' .$username. '" AND password = "' .sha1($password). '"');
+        $dbr->close();
 
         if( !$result ){
             throw new Exception('Could not log you in');
@@ -41,7 +41,6 @@
             return true;
         }
         throw new Exception('Could not log you in');
-
     }
 
 
@@ -57,7 +56,9 @@
         login($username, $old_password);
 
         $dbr = db_connect();
-        $result = $dbr->query("UPDATE user SET password = sha1('" .$new_password. "') WHERE username = '" .$username. "'");
+        $result = $dbr->query('UPDATE user SET password = "' .sha1($new_password). '" WHERE username = "' .$username. '"');
+        var_dump($dbr->error);
+        $dbr->close();
 
         if(!$result){
             throw new Exception('Password could not be changed');
@@ -68,28 +69,62 @@
     }
 
 
-    function reset_password($email){
+    function get_username_and_password($email){
+        $dbr = db_connect();
         $result = $dbr->query("SELECT * FROM user WHERE email='" .$email. "'");
-        if( !$result ){
-            throw new Exception('Could not query email. Please try it later.');
-        }
-        if( $result->num_rows > 0 ){
+        $dbr->close();
 
+        if( !$result ){
+            throw new Exception('Query database failed. Please try again later.');
+        }
+        if( $result->num_rows === 0 ){
+            return false;
+        }
+        return $result->fetch_array();
+    }
+
+
+    function add_reset_token($email, $token){
+        $dbr = db_connect();
+        $result = $dbr->query("UPDATE user SET reset_token = '" .$token. "' WHERE email = '" .$email. "'");
+        if(!$result){
+            exit('提交修改失败');
+        }
+        $dbr->close();
+    }
+
+    function delete_reset_token($username){
+        $dbr = db_connect();
+        $result = $dbr->query("UPDATE user SET reset_token = '' WHERE username = '" .$username. "'");
+        if(!$result){
+            exit('提交修改失败');
+        }
+        $dbr->close();
+    }
+
+
+    function add_reset_expire($email){
+        $dbr = db_connect();
+        $result = $dbr->query("UPDATE user SET reset_expire = '" .(time()+60). "' WHERE email = '" .$email. "'");
+        if(!$result){
+            exit('提交修改失败');
+        }
+        $dbr->close();
+    }
+
+
+    function reset_password($username, $new_password){
+        $dbr = db_connect();
+        $result = $dbr->query('UPDATE user SET password = "' .sha1($new_password). '" WHERE username = "' .$username. '"');
+        $dbr->close();
+
+        if(!$result){
+            exit('Password could not be changed');
         }
         else{
-            throw new Exception('That email is not found.');
+            return true;
         }
     }
 
-
-    function generate_random_string( $length=16 ) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i=0; $i<$length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
 
 ?>

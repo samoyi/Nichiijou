@@ -1,37 +1,63 @@
-<section>
-    sign up
-    <form action='register.php' method='post'>
-        <input type='email' name='email' required='required' placeholder='email' />
-        <input type='text' name='username' required='required' placeholder='user' />
-        <input type='password' name='password' required='required' placeholder='password' />
-        <input type='password' name='password_confirmation' required='required' placeholder='confirm password' />
-        <input type='submit' value='sign up' />
-    </form>
-</section>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body>
 
-<section>
-    log in
-    <form action='login.php' method='post'>
-        <input type='text' name='username' required='required' placeholder='user' />
-        <input type='password' name='password' required='required' placeholder='password' />
-        <input type='submit' value='log in' />
-    </form>
-</section>
+    <section>
+        sign up
+        <form action='register.php' method='post'>
+            <input type='email' name='email' required='required' placeholder='email' />
+            <input type='text' name='username' required='required' placeholder='user' />
+            <input type='password' name='password' required='required' placeholder='password' />
+            <input type='password' name='password_confirmation' required='required' placeholder='confirm password' />
+            <input class='submit' type='button' value='sign up' />
+        </form>
+    </section>
 
-<section>
-    change password
-    <form action='change_password.php' method='post'>
-        <input type='password' name='old_password' required='required' placeholder='old_password' />
-        <input type='password' name='new_password' required='required' placeholder='new_password' />
-        <input type='password' name='password_confirmation' required='required' placeholder='confirm password' />
-        <input type='submit' value='change' />
-    </form>
-</section>
+    <section>
+        log in
+        <form action='login.php' method='post'>
+            <input type='text' name='username' required='required' placeholder='user' />
+            <input type='password' name='password' required='required' placeholder='password' />
+            <input class='submit' type='button' value='log in' />
+        </form>
+    </section>
 
-<section>
-    forgot password
-    <form action='forgot_password.php' method='post'>
-        <input type='email' name='email' required='required' placeholder='email' />
-        <input type='submit' value='' />
-    </form>
-</section>
+    <section>
+        change password
+        <form action='change_password.php' method='post'>
+            <input type='password' name='old_password' required='required' placeholder='old_password' />
+            <input type='password' name='new_password' required='required' placeholder='new_password' />
+            <input type='password' name='password_confirmation' required='required' placeholder='confirm password' />
+            <input class='submit' type='button' value='change' />
+        </form>
+    </section>
+
+    <section>
+        forgot password
+        <form action='forgot_password.php' method='post'>
+            <input type='email' name='email' required='required' placeholder='email' />
+            <input class='submit' type='button' value='send email' />
+        </form>
+    </section>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.min.js"></script>
+<script>
+    [...document.querySelectorAll('.submit')].forEach((submit)=>{
+        submit.addEventListener('click', ()=>{
+            let form = submit.parentNode;
+            [...form.querySelectorAll('input[type="password"]')].forEach((item)=>{
+                item.value = CryptoJS.SHA1(item.value.trim()).toString();
+            });
+            form.submit();
+        });
+
+    });
+
+</script>
+</html>

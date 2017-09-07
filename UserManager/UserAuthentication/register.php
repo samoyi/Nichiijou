@@ -17,9 +17,6 @@
         if( !valid_email($email) ){
             throw new Exception('That is not a valid email address. Please go back and try again.');
         }
-        if( strlen($password)<6 || strlen($password)>16 ){
-            throw new Exception('Your passwords must be between 6 and 16 characters. Please go back and try again.');
-        }
         if( $password !== $password_confirmation ){
             throw new Exception('The passwords you entered do not match. Please go back and try again.');
         }
