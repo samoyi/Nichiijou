@@ -7,7 +7,7 @@
     $password = $_POST['password'];
     $password_confirmation = $_POST['password_confirmation'];
 
-
+    session_set_cookie_params(3600, '', '', false, true);
     session_start();
 
     try{

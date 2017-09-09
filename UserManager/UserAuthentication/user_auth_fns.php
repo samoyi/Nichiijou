@@ -19,7 +19,7 @@
             throw new Exception('That username is taken. Go back and choose another one.');
         }
 
-        $result = $dbr->query('INSERT INTO user VALUES ("' .$username. '", "' .sha1($password). '", "' .$email. '", "", "")');
+        $result = $dbr->query('INSERT INTO user VALUES ("' .$username. '", "' .hash('sha256', $password). '", "' .$email. '", "", "")');
         if( !$result ){
             throw new Exception('Could not register you in database. Please try again later.');
         }
@@ -30,7 +30,7 @@
 
     function login($username, $password){
         $dbr = db_connect();
-        $result = $dbr->query('SELECT * FROM user WHERE username="' .$username. '" AND password = "' .sha1($password). '"');
+        $result = $dbr->query('SELECT * FROM user WHERE username="' .$username. '" AND password = "' .hash('sha256', $password). '"');
         $dbr->close();
 
         if( !$result ){
@@ -56,7 +56,7 @@
         login($username, $old_password);
 
         $dbr = db_connect();
-        $result = $dbr->query('UPDATE user SET password = "' .sha1($new_password). '" WHERE username = "' .$username. '"');
+        $result = $dbr->query('UPDATE user SET password = "' .hash('sha256', $new_password). '" WHERE username = "' .$username. '"');
         var_dump($dbr->error);
         $dbr->close();
 
@@ -115,7 +115,7 @@
 
     function reset_password($username, $new_password){
         $dbr = db_connect();
-        $result = $dbr->query('UPDATE user SET password = "' .sha1($new_password). '" WHERE username = "' .$username. '"');
+        $result = $dbr->query('UPDATE user SET password = "' .hash('sha256', $new_password). '" WHERE username = "' .$username. '"');
         $dbr->close();
 
         if(!$result){

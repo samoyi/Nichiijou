@@ -6,9 +6,9 @@
 
     if(valid_email($email)){
         if( $info = get_username_and_password($email) ){
-            $token = sha1($info['username'] . $info['password']);
-            // 这个$sha1_str要在数据库该用户的行内保存一份。用户最终修改密码的是偶，
-            // 要根据用户名找到要修改的用户行，只有找到的用户行包含$sha1_str才能修改
+            $token = hash('sha256', $info['username'] . $info['password']);
+            // 这个$token要在数据库该用户的行内保存一份。用户最终修改密码的是偶，
+            // 要根据用户名找到要修改的用户行，只有找到的用户行包含$token才能修改
             // 如果不加这个，则用户在修改时，可以更改成其他用户的用户名，从而修改了
             // 其他用户的密码
             add_reset_token($email, $token);

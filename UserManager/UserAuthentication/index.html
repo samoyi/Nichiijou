@@ -5,6 +5,8 @@
 <title></title>
 </head>
 <body>
+    前端提交密码使用hash256加密，PHP存入数据库时再一次hash256
+    在使用https时，cookie自动使用安全模式，只能通过https访问
 http://www.jb51.net/article/57175.htm
 http://www.thinkphp.cn/topic/41920.html
 http://www.cnblogs.com/iriliguo/p/6363293.html
@@ -48,13 +50,13 @@ http://www.cnblogs.com/iriliguo/p/6363293.html
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha256.min.js"></script>
 <script>
     [...document.querySelectorAll('.submit')].forEach((submit)=>{
         submit.addEventListener('click', ()=>{
             let form = submit.parentNode;
             [...form.querySelectorAll('input[type="password"]')].forEach((item)=>{
-                item.value = CryptoJS.SHA1(item.value.trim()).toString();
+                item.value = CryptoJS.SHA256(item.value.trim()).toString();
             });
             form.submit();
         });

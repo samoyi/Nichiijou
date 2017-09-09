@@ -19,7 +19,7 @@
     }
 
     if($user = $result->fetch_array()){
-        if(sha1($user['username'] . $user['password']) !== $token){
+        if(hash('sha256', $user['username'] . $user['password']) !== $token){
             exit('token不匹配');
         }
         if( time()>$user['reset_expire'] ){
@@ -46,14 +46,14 @@
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha256.min.js"></script>
 <script>
 let submit = document.querySelector('.submit');
 if(submit){
     submit.addEventListener('click', ()=>{
         let form = submit.parentNode;
         [...form.querySelectorAll('input[type="password"]')].forEach((item)=>{
-            item.value = CryptoJS.SHA1(item.value.trim()).toString();
+            item.value = CryptoJS.SHA256(item.value.trim()).toString();
         });
         form.submit();
     });
