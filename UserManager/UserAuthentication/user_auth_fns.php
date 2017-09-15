@@ -34,13 +34,17 @@
         $dbr->close();
 
         if( !$result ){
-            throw new Exception('Could not log you in');
+            exit('Could not log you in');
         }
 
-        if( $result->num_rows >0 ){
+        if( $result->num_rows === 1 ){
             return true;
         }
-        throw new Exception('Could not log you in');
+        else if ( $result->num_rows === 0 ){
+            exit('Check your username or passowrd');
+        }
+
+        exit('Could not log you in');
     }
 
 
@@ -57,7 +61,6 @@
 
         $dbr = db_connect();
         $result = $dbr->query('UPDATE user SET password = "' .hash('sha256', $new_password). '" WHERE username = "' .$username. '"');
-        var_dump($dbr->error);
         $dbr->close();
 
         if(!$result){

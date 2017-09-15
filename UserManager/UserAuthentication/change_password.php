@@ -1,8 +1,10 @@
 ﻿<?php
-    session_set_cookie_params(3600, '', '', false, true);
+    require_once 'fns.php';
+    
+    session_set_cookie_params(3600, '', '', isSecure(), true);
     session_start();
 
-    require_once 'fns.php';
+
 
     $old_password = $_POST['old_password'];
     $new_password = $_POST['new_password'];

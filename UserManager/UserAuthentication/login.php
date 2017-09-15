@@ -1,9 +1,9 @@
 ﻿<?php
+    require_once 'fns.php';
 
-    session_set_cookie_params(3600, '', '', false, true);
+    session_set_cookie_params(3600, '', '', isSecure(), true);
     session_start();
 
-    require_once 'fns.php';
 
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -12,14 +12,8 @@
 
 
     if( $username && $password ){
-        try{
-            login( $username, $password );
-            $_SESSION['valid_user'] = $username;
-        }
-        catch(Exception $err){
-            echo 'You could not be logged in.';
-            exit;
-        }
+        login( $username, $password );
+        $_SESSION['valid_user'] = $username;
     }
 
 

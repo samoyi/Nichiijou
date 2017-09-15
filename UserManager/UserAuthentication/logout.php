@@ -1,5 +1,7 @@
 ﻿<?php
-    session_set_cookie_params(3600, '', '', false, true);
+    require_once 'fns.php';
+
+    session_set_cookie_params(3600, '', '', isSecure(), true);
     session_start();
 
     if( isset($_SESSION['valid_user']) ){
