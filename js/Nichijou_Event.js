@@ -1,107 +1,76 @@
-"use strict";
 
-function Nichijou_Event(name, age, job)
+// 模拟事件
+/*
+*  可以传入一个对象作为第三个参数，用于重写和补充 defaultEventProperties
+*
+*/
+/*
+*  TODO
+*    1. 目前只支持 eventsCanSimulate 中的事件
+*    2. 这里模拟事件的方法已经被废弃
+*/
 {
-	
-	// common properties ---------------------------------------------------------------------------------------
-	
-	
-	
-    // common functions ----------------------------------------------------------------------------------------
-	
-	
+	function simulateEvent(element, eventName)
+	{
+		let eventsCanSimulate = {
+			'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+			'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+		};
+		let defaultEventProperties = {
+			pointerX: 0,
+			pointerY: 0,
+			button: 0,
+			ctrlKey: false,
+			altKey: false,
+			shiftKey: false,
+			metaKey: false,
+			bubbles: true,
+			cancelable: true
+		};
 
-    
+		let options = Object.assign(defaultEventProperties, arguments[2] || {});
+		let oEvent, eventType = null;
 
-    // public properties ---------------------------------------------------------------------------------------
-    
-
-
-    
-    // public methods ------------------------------------------------------------------------------------------
-    if (typeof this.simulateEvent != "function")
-    {
-        // 模拟事件
-        /*
-         *  可以传入一个对象作为第三个参数，用于重写和补充 defaultEventProperties
-         *  
-         */
-		/* 
-		 *  TODO  
-		 *    1. 目前只支持 eventsCanSimulate 中的事件
-		 *    2. 这里模拟事件的方法已经被废弃
-		 */	
-        Nichijou_Event.prototype.simulateEvent = function simulateEvent(element, eventName)
+		for (let name in eventsCanSimulate)
 		{
-			let eventsCanSimulate = {
-				'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
-				'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
-			};
-			let defaultEventProperties = {
-				pointerX: 0,
-				pointerY: 0,
-				button: 0,
-				ctrlKey: false,
-				altKey: false,
-				shiftKey: false,
-				metaKey: false,
-				bubbles: true,
-				cancelable: true
-			};
-
-			let options = Object.assign(defaultEventProperties, arguments[2] || {});
-			let oEvent, eventType = null;
-
-			for (let name in eventsCanSimulate)
+			if (eventsCanSimulate[name].test(eventName))
 			{
-				if (eventsCanSimulate[name].test(eventName)) 
-				{ 
-					eventType = name; 
-					break; 
-				}
+				eventType = name;
+				break;
 			}
+		}
 
-			if (!eventType)
-				throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+		if (!eventType)
+		throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
 
-			if (document.createEvent)
-			{	
-				oEvent = document.createEvent(eventType);
-				switch(eventType)
+		if (document.createEvent)
+		{
+			oEvent = document.createEvent(eventType);
+			switch(eventType)
+			{
+				case "HTMLEvents":
 				{
-					case "HTMLEvents": 
-					{
-						oEvent.initEvent(eventName, options.bubbles, options.cancelable);
-						break;
-					}
-					case "MouseEvents": 
-					{
-						oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+					oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+					break;
+				}
+				case "MouseEvents":
+				{
+					oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
 						options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
 						options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
 						break;
-					}
 				}
-				element.dispatchEvent(oEvent);
 			}
-			else
-			{
-				options.clientX = options.pointerX;
-				options.clientY = options.pointerY;
-				let evt = document.createEventObject();
-				oEvent = Object.assign(evt, options);
-				element.fireEvent('on' + eventName, oEvent);
-			}
-			return element;
+			element.dispatchEvent(oEvent);
 		}
-
-    }
+		else
+		{
+			options.clientX = options.pointerX;
+			options.clientY = options.pointerY;
+			let evt = document.createEventObject();
+			oEvent = Object.assign(evt, options);
+			element.fireEvent('on' + eventName, oEvent);
+		}
+		return element;
+	}
 }
-
-
-
-
-
-
-
-  
