@@ -6,11 +6,27 @@
 <body>
 
 </body>
-<script src="Nichijou_Math.js"></script>
+<script src="Nichijou_String.js"></script>
 <script>
 "use strict";
 
-console.log( Number.isSafeInteger(5) );
+for(let i=0; i<20; i++){
+    console.log( randomNumericString(40) );
+}
+
+function randomNumericString(n){
+    const nSafeLen = (Number.MAX_SAFE_INTEGER + '').length - 1;
+    function safeStr(){
+        return (''+Math.floor( Math.random() * Math.pow(10, nSafeLen) )).padStart(nSafeLen, '0');
+    }
+
+    let sResult = '';
+    while(n>nSafeLen){
+        sResult += safeStr();
+        n -= nSafeLen;
+    }
+    return sResult +  (''+Math.floor( Math.random() * Math.pow(10, n) )).padStart(n, '0');
+}
 
 
 

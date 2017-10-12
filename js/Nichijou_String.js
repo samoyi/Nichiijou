@@ -24,3 +24,31 @@
         return aNeedToBeEscaped.join("");
     }
 }
+
+
+
+// random numeric string with specific length
+/*
+ * Inside this function a number 10^n will generate , if this number is bigger
+ * than Number.MAX_SAFE_INTEGER(9007199254740991, 16 digits), I'm not sure but
+ * maybe, the calculation will get something wrong.
+ * Therefore, if parameter n is larger than 15, this function will use safeStr()
+ * to create some substring, and concatenate them.
+ *
+ *
+ */
+{
+    function randomNumericString(n){
+        const nSafeLen = (Number.MAX_SAFE_INTEGER + '').length - 1;
+        function safeStr(){
+            return (''+Math.floor( Math.random() * Math.pow(10, nSafeLen) )).padStart(nSafeLen, '0');
+        }
+
+        let sResult = '';
+        while(n>nSafeLen){
+            sResult += safeStr();
+            n -= nSafeLen;
+        }
+        return sResult +  (''+Math.floor( Math.random() * Math.pow(10, n) )).padStart(n, '0');
+    }
+}
