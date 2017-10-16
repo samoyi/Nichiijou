@@ -34,3 +34,13 @@
         return aRemoved;
     }
 }
+
+
+// 某个值是否出现在一个数组中相邻的位置上
+{    
+    function hasAdjacentSameValues(arr, val){
+        return arr.some((value, index)=>{
+            return Object.is(value, val) && Object.is(value, arr[index+1]);
+        });
+    }
+}
