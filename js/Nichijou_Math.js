@@ -38,7 +38,6 @@
 
 // 在指定闭区间内生成不重复的nNum个整数
 {
-
 	function createNonReplicativeInt(nMin, nMax, nNum)
 	{
 		if( typeof arguments[0] !== "number" || typeof arguments[0] !== "number" || typeof arguments[0] !== "number" )
@@ -64,5 +63,45 @@
 		}
 
 		return aResult;
+	}
+}
+
+
+
+
+// 数学基础 ————————————————————————————————————————————————————————————————————
+
+// 二元一次方程组求解
+{
+	/*
+	 * ax + by = M
+	 * cx + dy = N
+	 */
+	function foo(a, b, c, d, M, N){
+	    if( a/c === b/d ){
+	        if( a/c === M/N ){
+	            return []; // 无数解
+	        }
+	        else{
+	            return null; // 无解
+	        }
+	    }
+	    let x = (d*M - b*N) / (a*d - b*c);
+	    return [x, (M-a*x)/b]; // 唯一解
+	}
+}
+
+// 一元二次方程求根公式
+{
+	// ax*x + bx + c = 0
+	function getRoot(a, b, c){
+	    let delta = b*b - 4*a*c;
+	    if( delta >=0 ){
+	        let sqrt = Math.sqrt(b*b - 4*a*c);
+	        return [(-b + sqrt)/2*a, (-b - sqrt)/2*a];
+	    }
+	    else{
+	        return null;
+	    }
 	}
 }
