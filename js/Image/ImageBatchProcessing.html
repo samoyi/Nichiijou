@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Canvas图片批量修改</title>
+<style>
+canvas, #source, #download{
+    display: none;
+}
+</style>
+</head>
+<body>
+    <input  type="file" multiple />
+    选择图片后会自动处理并下载
+    <div>
+        <h1>Canvas图片批量添加注释（改一改也可以进行其他批处理）</h1>
+        <p>这里的例子是在每个图片下面增加一段空白并写上图片的名字</p>
+        <p>关于toDataURL方法降低图片质量的问题看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL" target="_blank">这里</a></p>
+        <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader#Browser_compatibility" target="_blank">FileReader兼容性</a>不好</p>
+    </div>
+    <a id="download"></a>
+    <img id="source" src="image/Jonathan.png" />
+    <canvas width="500" height="550"></canvas>
+</body>
+<script>
+'use strict';
+
+let input = document.querySelector('input'),
+    source = document.querySelector('#source'),
+    cvs = document.querySelector('canvas'),
+    ctx = cvs.getContext("2d"),
+    reader = new FileReader(),
+    downloadLink = document.querySelector('#download'),
+    files = null,
+    index = null;
+
+input.addEventListener('change', (ev)=>{
+    files = ev.target.files;
+    index = 0;
+    readFile(files, index);
+});
+
+// 事件绑定不能放到反复执行的代码段里面。一般都不能。
+reader.addEventListener('load', ()=>{
+    source.src = reader.result;
+    source.onload = function(){
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+        let url = modifyImage(files[index]);
+        downloadFile(downloadLink, url, PNGBaseName(files[index]));
+
+        index++;
+        readFile(files, index);
+    };
+
+});
+
+function readFile(files, index){
+    if(index<files.length){
+        reader.readAsDataURL(files[index]);
+    }
+    else{
+        input.value = '';
+    }
+}
+
+function modifyImage(file){
+    return drawCodeImage(file);
+}
+
+function drawCodeImage(file){
+    ctx.drawImage(source, 0, 0, 500, 500);
+    addNameToCVS(file);
+    return cvs.toDataURL("image/png");
+}
+
+function addNameToCVS(file){
+    let name = PNGBaseName(file),
+        len = name.length;
+
+    let nFontSize = 40;
+    ctx.font = nFontSize+"px SimHei";
+    ctx.fillText(name, 250-len/2*nFontSize, 540);
+}
+
+function PNGBaseName(file){
+    return file.name.slice(0, -4);
+}
+
+function downloadFile(oLink, url, name){
+    oLink.href = url;
+    oLink.download = name;
+    oLink.click();
+}
+
+</script>
+</html>
