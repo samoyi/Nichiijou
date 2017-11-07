@@ -1,4 +1,4 @@
-;"use strict";
+"use strict";
 {
 	let xhr = new XMLHttpRequest();
 	xhr.addEventListener('readystatechange', function()

@@ -1,4 +1,4 @@
-;"use strict";
+"use strict";
 
 // 《Javascript - The Definitive Guide 6th》
 

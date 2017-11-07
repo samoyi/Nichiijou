@@ -1,4 +1,4 @@
-;"use strict";
+"use strict";
 
 function Fibonacci (n) {
   if ( n <= 1 ) {return 1};
