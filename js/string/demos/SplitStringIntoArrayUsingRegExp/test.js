@@ -3,6 +3,9 @@
 
 const strToArr = require('./index');
 
+const fs = require('fs'),
+      util = require('util');
+
 // split rule
 /*
  * 1. aRule's length is the number you want to split a string into that parts.
@@ -20,6 +23,13 @@ let aRule = [null, reCoordinateValue, reCoordinateValue]; //忽略的项不能�
 const lineReader = require('readline').createInterface({
     input: require('fs').createReadStream('coordinates.txt')
 });
+
+let result = {},
+    city = null;
 lineReader.on('line', function (line) {
-    console.log( strToArr(line, aRule) );
+    city = strToArr(line, aRule);
+    result[city[0]] = [Number.parseFloat(city[1]), Number.parseFloat(city[2])];
+});
+lineReader.on('close', function(){
+    fs.writeFileSync('coordinates.json', JSON.stringify(result, null, 4));
 });
