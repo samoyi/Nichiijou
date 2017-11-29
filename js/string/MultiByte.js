@@ -129,3 +129,5 @@ function MB(){
         return [...str].slice(start, end).join('');
     };
 }
+
+module.exports = new MB();

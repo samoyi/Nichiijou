@@ -93,3 +93,18 @@
         });
     }
 }
+
+
+// Find the indexes of all ascii characters in a string
+{
+    function findAsciiIndexes(str){
+        let aStr = [...str],
+        aIndex = [];
+        aStr.filter((char,index)=>{
+            if(char.codePointAt(0)<127){
+                aIndex.push(index);
+            }
+        });
+        return aIndex;
+    }
+}
