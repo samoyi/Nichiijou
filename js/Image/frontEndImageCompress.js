@@ -8,7 +8,7 @@
  *									2. 如果res.errCode属性值为2，表示传入的图片尺寸超过限制，res.errMsg值为传入的图片的size值
  *									3. 如果res.errCode属性值为0，表示压缩成功：
  *										①. 如果第五个参数bDataURL==true，则res.dataURL为成功压缩后的DataURL字符串，图片类型为webp
- *										②. 如果第五个参数bDataURL==false，则res.blob为成功压缩后的blob对象，type为图片原类型
+ *										②. 如果第五个参数bDataURL==false，则res.blob为成功压缩后的blob对象，因为是用上述dataURL转换而成的，所以type也是webp
  * @param {Boolean}   bDataURL:    回调函数默认接收的压缩结果为Blob类型。如果该参数为真，在回调函数中接收到的将是DataURL，因为是Base64编码，所以数据量会比Blob多1/3
  */
 
