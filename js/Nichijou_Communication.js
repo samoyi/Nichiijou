@@ -8,7 +8,7 @@
  * @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取xhr.status
  */
 {
-	function AJAX_GET(sURL, fnSuccessCallback, fnFailCallback)
+	function ajax_get(sURL, fnSuccessCallback, fnFailCallback)
 	{
 		let xhr = new XMLHttpRequest();
 		xhr.addEventListener('readystatechange', function()
@@ -38,7 +38,7 @@
  * @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取xhr.status
  */
 {
-	function AJAX_POST(sURL, data, fnSuccessCallback, fnFailCallback)
+	function ajax_post(sURL, data, fnSuccessCallback, fnFailCallback)
 	{
 		let xhr = new XMLHttpRequest();
 		xhr.addEventListener('readystatechange', function()
