@@ -54,6 +54,33 @@
 }
 
 
+// Batch generates unique strings
+{
+    const aChars = [...'23456789abcdefghjkmnpqrstuvwxyz'];
+
+    // Generate 5,000 unique 8-bit strings using the characters in aChars
+    let codeSet = generateBatchUnique(aChars, 8, 5000);
+
+    function generateBatchUnique(aChars, nLen, nAmount){
+        let set = new Set();
+        while(set.size<nAmount){
+            set.add(generateOne(aChars, nLen));
+        }
+        return [...set];
+    }
+    function generateOne(aChars, nLen){
+        let nCharAmount = aChars.length;
+        let nIndex = null,
+            sCode = '';
+        for(let i=0; i<nLen; i++){
+            nIndex = Math.floor(Math.random()*nCharAmount);
+            sCode += aChars[nIndex];
+        }
+        return sCode;
+    }
+}
+
+
 // Split a string into an array using RegExp
 // See demos/SplitStringIntoArrayUsingRegExp
 {
