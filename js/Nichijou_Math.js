@@ -69,6 +69,40 @@
 
 
 
+// 将一组数字映射到一套评分系统中
+/*
+ *	@param  aScore    Array   一组数字
+ *	@param  nMinStar  Number  评分系统的最低分
+ *	@param nMaxStar   Number  评分系统的最低分
+ *	@param nStepStar  Number  评分系统的分数的最小单位
+ */
+{
+	// let aScore = [86, 24, 35, 39, 30, 71, 80, 87, 97, 39];
+	// // 将这组分数映射到五星评分制度上
+	// // 最低可以得到3颗星，最高可以得到5颗星，最小步幅为半颗星
+	// console.log(mapScoreToStar(aScore, 3, 5, 0.5));
+	// Output: [ 4.5, 3, 3.5, 3.5, 3, 4.5, 4.5, 4.5, 5, 3.5 ]
+
+	function mapScoreToStar(aScore, nMinStar, nMaxStar, nStepStar){
+	    // 数组排序找到最低最高分
+	    let aCopy = aScore.slice(0),
+	        aSort = aCopy.sort((m,n)=>m-n);
+	        nMin = aSort[0],
+	        nMax = aSort[aSort.length-1];
+
+	        // nStep是 nStepStar对应的分数
+	    let nStep = (nMax-nMin)/((nMaxStar-nMinStar)/nStepStar),
+	        // 0星对应的分数
+	        nStar0 = nMin - nStep*(nMinStar/nStepStar);
+
+	    return aScore.map(score=>{
+	        return Math.round((score-nStar0)/nStep)/2;
+	    });
+	}
+}
+
+
+
 // 数学基础 ————————————————————————————————————————————————————————————————————
 
 // 二元一次方程组求解
