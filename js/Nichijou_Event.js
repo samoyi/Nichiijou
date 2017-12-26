@@ -1,4 +1,20 @@
 
+// long press
+{
+	function longPress(oNode, callback, nMS=800){
+	    oNode.addEventListener('touchstart', ()=>{
+	        oNode.LPtimer = setTimeout(()=>{
+	            callback();
+	        }, nMS);
+	    });
+	    oNode.addEventListener('touchend', ()=>{
+	        clearInterval(oNode.LPtimer);
+	    });
+	}
+}
+
+
+
 // 模拟事件
 /*
 *  可以传入一个对象作为第三个参数，用于重写和补充 defaultEventProperties
