@@ -102,6 +102,25 @@
 }
 
 
+// 若干个点均匀分布在圆环上，得出每个点相对于圆心的坐标
+/**
+ * @param nRadius     {integer}  半径像素值
+ * @param nAmount     {integer} 用几个点将圆环均分
+ * @param nInitRadian {integer} 第一个点的弧度制，默认为0，3点钟方向，逆时针为正方向
+ */
+function coordinatesOnRing(nRadius, nAmount, nInitRadian=0){
+    const nRadianInterval = Math.PI*2/nAmount;
+    let nRadian = 0,
+        aCoordinate = [];
+
+    for(let i=0; i<nAmount; i++){
+        nRadian = i*nRadianInterval+nInitRadian;
+        aCoordinate.push([Math.round(Math.cos(nRadian)*nRadius),
+                        Math.round(-Math.sin(nRadian)*nRadius)]);
+    }
+    return aCoordinate;
+}
+
 
 // 数学基础 ————————————————————————————————————————————————————————————————————
 
