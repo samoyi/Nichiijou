@@ -109,16 +109,16 @@
  * @param nInitRadian {integer} 第一个点的弧度值，默认为0，3点钟方向，逆时针为正方向
  */
 function coordinatesOnRing(nRadius, nAmount, nInitRadian=0){
-    const nRadianInterval = Math.PI*2/nAmount;
-    let nRadian = 0,
-        aCoordinate = [];
-
-    for(let i=0; i<nAmount; i++){
-        nRadian = i*nRadianInterval+nInitRadian;
-        aCoordinate.push([Math.round(Math.cos(nRadian)*nRadius),
-                        Math.round(-Math.sin(nRadian)*nRadius)]);
-    }
-    return aCoordinate;
+	const nRadianInterval = Math.PI*2/nAmount;
+	let nRadian = 0,
+	aCoordinate = [];
+	if(nInitRadian<0){nInitRadian+=Math.PI*2}
+	for(let i=0; i<nAmount; i++){
+		nRadian = (i*nRadianInterval+nInitRadian)%(Math.PI*2);
+		aCoordinate.push([Math.round(Math.cos(nRadian)*nRadius),
+			Math.round(-Math.sin(nRadian)*nRadius)]);
+		}
+	return aCoordinate;
 }
 
 
