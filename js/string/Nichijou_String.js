@@ -55,18 +55,25 @@
 
 
 // Batch generates unique strings
+/**
+ * 如果之前已经有了一批不重复的字符串，这次要生成的仍然要和已有的不存在重复，则把已有的
+ * 字符串组成数组传入第四个参数
+ */
 {
     const aChars = [...'23456789abcdefghjkmnpqrstuvwxyz'];
 
     // Generate 5,000 unique 8-bit strings using the characters in aChars
     let codeSet = generateBatchUnique(aChars, 8, 5000);
 
-    function generateBatchUnique(aChars, nLen, nAmount){
-        let set = new Set();
+    function generateBatchUnique(aChars, nLen, nAmount, aAlready=[])){
+        let set = new Set(aAlready);
+
+        nAmount += aAlready.length;
+
         while(set.size<nAmount){
             set.add(generateOne(aChars, nLen));
         }
-        return [...set];
+        return [...set].slice(aAlready.length);
     }
     function generateOne(aChars, nLen){
         let nCharAmount = aChars.length;
