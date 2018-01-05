@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, height=device-height,
+        initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+<title></title>
+<style>
+#img {
+    width: 200px;
+    /* transform: scale3d(.5, .5, 1); */
+}
+</style>
+<script src="https://hammerjs.github.io/dist/hammer.js"></script>
+</head>
+<body>
+    <h1>使用hammer.js对图片进行两指放大</h1>
+    <img src="omj.jpg" id="img" />
+</body>
+
+<script>
+    'use strict';
+
+    let oImg = document.getElementById('img');
+
+    const nMaxScale = 3;
+
+    // 如果如syle中注释的那样，则第三个参数传 0.5
+    pinchImage(oImg, nMaxScale);
+    /**
+     * @param  oImg        {node}     img节点
+     * @param  nMaxScale   {integer}  允许放大的transform的scale值的最大比例
+     * @param  nInitScale  {integer}  图片初始transform的scale。
+     *                                  默认为1，如果不是1则传入
+     */
+    function pinchImage(oImg, nMaxScale, nInitScale=1){
+        const mc = new Hammer.Manager(oImg);
+        const pinch = new Hammer.Pinch();
+        mc.add([pinch]);
+
+        let nLastScale = nInitScale;
+        let nCurScale = nInitScale;
+
+        mc.on("pinchin", function(ev) {
+            nCurScale = nLastScale * ev.scale;
+            document.title = 'in ' + nCurScale;
+            nCurScale = nCurScale<nInitScale ? nInitScale : nCurScale;
+            oImg.style.transform = 'scale3d(' +nCurScale+ ', ' +nCurScale+ ', 1)';
+        });
+        mc.on("pinchout", function(ev) {
+            nCurScale = nLastScale * ev.scale;
+            document.title = 'out ' + nCurScale;
+            nCurScale = nCurScale>nMaxScale ? nMaxScale : nCurScale;
+            oImg.style.transform = 'scale3d(' +nCurScale+ ', ' +nCurScale+ ', 1)';
+        });
+
+        // 因为ev.scale每次都是从1开始，所以每次pinch之后都要将当前的宽度作为基准
+        // 如果以初始宽度为基准的话，每次pinch开始的时候图片都要先回到初始宽度
+        mc.on("pinchend", function(ev) {
+            nLastScale = nCurScale;
+        });
+    }
+
+</script>
+</html>
