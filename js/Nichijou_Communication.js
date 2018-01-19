@@ -30,6 +30,34 @@
 }
 
 
+// AJAX GET
+/*
+ * @param sURL               请求URL
+ * @param fnSuccessCallback  请求成功之后的回调函数。接受一个参数用来获取xhr.response
+ * @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取xhr.status
+ */
+{
+	function ajax_getBlob(sURL, fnSuccessCallback, fnFailCallback)
+	{
+		let xhr = new XMLHttpRequest();
+		xhr.addEventListener('readystatechange', function(){
+			if (xhr.readyState == 4)
+			{
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+					fnSuccessCallback && fnSuccessCallback( xhr.response );
+				}
+				else{
+					fnFailCallback && fnFailCallback( xhr.status );
+				}
+			}
+		}, false);
+		xhr.responseType = "blob";
+		xhr.open("get", sURL, true);
+		xhr.send(null);
+	}
+}
+
+
 // AJAX POST
 /*
  * @param sURL               请求URL
