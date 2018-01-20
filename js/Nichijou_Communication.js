@@ -66,6 +66,14 @@
  * @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取xhr.status
  */
 {
+	function stringify(data){
+	    let str = '';
+	    for(let key in data){
+	        str += (key + '=' + data[key] + '&');
+	    }
+	    return str.slice(0, -1);
+	}
+
 	function ajax_post(sURL, data, fnSuccessCallback, fnFailCallback)
 	{
 		let xhr = new XMLHttpRequest();
@@ -85,6 +93,6 @@
 		xhr.open("post", sURL, true);
 		// 如果发送FormDate，则不需要设置Content-Type，但截至2017.5，FormDate的浏览器支持并不理想
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		xhr.send(data);
+		xhr.send(stringify(data));
 	}
 }
