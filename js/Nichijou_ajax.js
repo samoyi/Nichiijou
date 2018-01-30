@@ -10,7 +10,7 @@ function stringify(data){
 }
 
 
-const ajax = {
+const XHR = {
 	// GET
 	/*
 	* @param sURL               请求URL
@@ -92,7 +92,46 @@ const ajax = {
 };
 
 
+const FETCH = {
+	async get(sURL, fnSuccessCallback, fnFailCallback){
+		try{
+			let res = await fetch(sURL);
+			fnSuccessCallback(res);
+		}
+		catch(err){
+			fnFailCallback(err);
+		}
+	},
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
-	ajax,
+	XHR,
 	fetch
 };
