@@ -38,8 +38,10 @@ function stringify(data){
 	return str.slice(0, -1);
 }
 
-let sURL = 'test.php',
-    data = {name: "33", age: 22};
+// let sURL = 'http://red-space.cn/test/test.php',
+// let sURL = 'test.php',
+let sURL = 'http://localhost:8080/',
+    data = JSON.stringify({name: "33", age: 22});
 post(sURL, data, resText=>{console.log(resText)});
 function post(sURL, data, fnSuccessCallback, fnFailCallback){
     let xhr = new XMLHttpRequest();
@@ -56,11 +58,12 @@ function post(sURL, data, fnSuccessCallback, fnFailCallback){
             }
         }
     }, false);
-    xhr.open("post", sURL, true);
+    // xhr.open("post", sURL, true);
+    xhr.open("put", sURL, true);
     // 如果发送FormDate，则不需要设置Content-Type，但截至2017.5，FormDate的浏览器支持并不理想
     // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(stringify(data));
+    xhr.send(data);
 }
 
 </script>
