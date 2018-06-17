@@ -5,71 +5,54 @@
 </head>
 <body>
 <p>
-	<input type="button" id="default" value="default" />
+	<input type="button" id="home" value="home" />
 	<input type="button" id="about" value="about" />
-</p>
-<p>
 	<input type="button" id="page1" value="page1" />
 	<input type="button" id="page2" value="page2" />
 </p>
+<p id="content"></p>
 </body>
 <script src="Front-end_Router_Object.js"></script>
 <script>
 "use strict";
 
+const oContent = document.querySelector('#content');
+function displayContent(sContent){
+	oContent.textContent = sContent;
+}
 
-let Router = createRouter();
-// let Router1 = createRouter();
+let router = createRouter();
 
-Router.config({mode: 'history', root: 'gits/Nichijou/js/Router/Front-end_Router_Object'});
-// Router1.config({mode: 'hash'});
-
-
-Router
-	.add(/about/, function ()
-	{
-		console.log('page about');
+router
+	.config({mode: 'history', root: 'gits/Nichijou/js/Router/Front-end_Router_Object'})
+	.add(/\//, function (){
+		displayContent('This is home page')
 	})
-	.add(function ()
-	{
-		console.log('page default');
+	.add(/about/, function (){
+		displayContent('This is about page')
 	})
-	.listen();
-
-/*	
-Router1
-	.add(/page1/, function ()
-	{
-		console.log('page1');
+	.add(/page1/, function (){
+		displayContent('This is page1')
 	})
-	.add(/page2/, function ()
-	{
-		console.log('page2');
+	.add(/page2/, function (){
+		displayContent('This is page2')
 	})
 	.listen();
-*/
 
-	
-document.querySelector("#default").addEventListener("click", function()
-{
-	Router.navigate('/default').check();
+document.querySelector("#home").addEventListener("click", function(){
+	router.navigate('/');
 }, false);
-document.querySelector("#about").addEventListener("click", function()
-{
-	Router.navigate('about.html').check();
+document.querySelector("#about").addEventListener("click", function(){
+	router.navigate('about');
+}, false);
+document.querySelector("#page1").addEventListener("click", function(){
+	router.navigate('page1');
+}, false);
+document.querySelector("#page2").addEventListener("click", function(){
+	router.navigate('page2');
 }, false);
 
-/*
-document.querySelector("#page1").addEventListener("click", function()
-{
-	Router1.navigate('page1').check();
-}, false);
-document.querySelector("#page2").addEventListener("click", function()
-{
-	Router1.navigate('page2').check();
-}, false);
-	*/
-	
+
 
 
 
