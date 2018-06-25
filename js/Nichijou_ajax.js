@@ -14,15 +14,13 @@ const XHR = {
 	// GET
 	/*
 	* @param sURL               请求URL
-	* @param fnSuccessCallback  请求成功之后的回调函数。接受一个参数用来获取xhr.responseText
-	* @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取xhr.status
+	* @param fnSuccessCallback  请求成功之后的回调函数。接受一个参数用来获取 xhr.responseText
+	* @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取 xhr.status
 	*/
 	xhr_get(sURL, fnSuccessCallback, fnFailCallback){
 		let xhr = new XMLHttpRequest();
-		xhr.addEventListener('readystatechange', function()
-		{
-			if (xhr.readyState == 4)
-			{
+		xhr.addEventListener('readystatechange', function(){
+			if (xhr.readyState == 4){
 				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
 					// 必要的时候，使用 getResponseHeader() 检查首部信息
 					fnSuccessCallback && fnSuccessCallback( xhr.responseText );
@@ -40,14 +38,13 @@ const XHR = {
 	// GET Blob
 	/*
 	* @param sURL               请求URL
-	* @param fnSuccessCallback  请求成功之后的回调函数。接受一个参数用来获取xhr.response
-	* @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取xhr.status
+	* @param fnSuccessCallback  请求成功之后的回调函数。接受一个参数用来获取 xhr.response
+	* @param fnFailCallback     请求失败之后的回调函数。接受一个参数用来获取 xhr.status
 	*/
 	xhr_getBlob(sURL, fnSuccessCallback, fnFailCallback){
 		let xhr = new XMLHttpRequest();
 		xhr.addEventListener('readystatechange', function(){
-			if (xhr.readyState == 4)
-			{
+			if (xhr.readyState == 4){
 				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
 					fnSuccessCallback && fnSuccessCallback( xhr.response );
 				}
@@ -71,10 +68,8 @@ const XHR = {
 	*/
 	xhr_post(sURL, data, fnSuccessCallback, fnFailCallback){
 		let xhr = new XMLHttpRequest();
-		xhr.addEventListener('readystatechange', function()
-		{
-			if (xhr.readyState == 4)
-			{
+		xhr.addEventListener('readystatechange', function(){
+			if (xhr.readyState == 4){
 				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
 					// 必要的时候，使用 getResponseHeader() 检查首部信息
 					fnSuccessCallback && fnSuccessCallback( xhr.responseText );
@@ -85,7 +80,7 @@ const XHR = {
 			}
 		}, false);
 		xhr.open("post", sURL, true);
-		// 如果发送FormDate，则不需要设置Content-Type，但截至2017.5，FormDate的浏览器支持并不理想
+		// 如果发送 FormDate，则不需要设置 Content-Type，但截至2017.5，FormDate 的浏览器支持并不理想
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.send(stringify(data));
 	},
@@ -96,8 +91,8 @@ const FETCH = {
 	// fetch get
 	/**
 	* @param sURL               请求URL
-	* @param sReadType          读取response的方法名字符串：
-	*								arrayBuffer、blob、formData、json和text
+	* @param sReadType          读取 response 的方法名字符串：
+	*								arrayBuffer、blob、formData、json 和 text
 	* @param oInit				fetch()方法的第二个参数
 	* @return            		使用sReadType指定的方法读取response返回的
 	*                           	promise对象。solve之后的res参数为一个对象
