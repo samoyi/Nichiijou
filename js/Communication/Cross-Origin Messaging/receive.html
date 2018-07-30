@@ -2,28 +2,44 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>作为http://localhost:3000的iframe</title>
 </head>
 <body>
-<p>This page must be in domain of www.receiveDomain.com<p>
+    接收到的数据：<span></span>
+    <p id="warn"></p>
 </body>
 <script>
-"use strict";
+'use strict';
 
-	const SEND_ORIGIN = "http://www.sendDomain.com"; // expected origin, use default port
+if (window.self !== window.top){
+    // 可以尝试修改 origin 来查看拒绝接受消息的情况
+    const sAllowedOrigin = 'http://localhost:3000';
 
-	window.addEventListener("message", handleMessage, false); // receive message
-	function handleMessage(event)
-	{
-	  // Check if the event.origin is expected
-	  if (event.origin === SEND_ORIGIN){
-		// If expect same-origin message, you could check event.source
-		let data = event.data;
-		document.body.innerHTML = "name: " + data.name + "<br />age: " + data.age + "<br />stamp: " + data.stamp;
 
-		event.source.postMessage("copy that", event.origin); // reply
-	  }
-	}
+    // 接收 postMessage
+    window.addEventListener('message', receiveMessage, false);
+
+    const oSpan = document.querySelector('span');
+    const oWarn = document.querySelector('#warn');
+
+    function receiveMessage(ev){
+        // 检查 origin 是否是预期的
+        if (ev.origin === sAllowedOrigin){
+            oWarn.textContent = '';
+            oSpan.textContent = ev.data; // 接收到的数据
+            // 也可以向 source 返回一条数据
+            ev.source.postMessage(`接收到了数据：${ev.data}`, sAllowedOrigin);
+        }
+        else {
+            oWarn.textContent = '错误的 source 试图发送信息：' +ev.origin ;
+        }
+    }
+}
+else {
+    alert('不要直接打开这个html，这是作为http://localhost:3000的iframe');
+}
+
+
 
 
 </script>
