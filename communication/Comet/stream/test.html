@@ -12,31 +12,27 @@
 
 let xhr = new XMLHttpRequest();
 
-let sRes = "",
-	nReceived = 0,
-	sResult = "";
-	
-xhr.addEventListener("readystatechange", function()
-{
-	if( xhr.readyState === 3 )
-	{
+let sRes = "";
+let nReceived = 0;
+let sResult = "";
+
+xhr.addEventListener("readystatechange", function(){
+	if (xhr.readyState === 3){
 		// 关于这里过滤空格返回值的情况，参考php文件中的说明
-		if( sRes = xhr.responseText.trim() )
-		{
+		if (sRes = xhr.responseText.trim()){
 			sResult = sRes.substring(nReceived);
 			nReceived += sResult.length;
-			/* 
-			 * 后端结束输出后，前端会连续发生两次readystatechange事件。
-			 * readyState分别为3和4。这一次readyState为3的readystatechange事件
-			 * 会接收到和上一次相同的数据，所以sResult会是一个空字符串
-			 */
-			if( sResult ){
+			/*
+			* 后端结束输出后，前端会连续发生两次readystatechange事件。
+			* readyState分别为3和4。这一次readyState为3的readystatechange事件
+			* 会接收到和上一次相同的数据，所以sResult会是一个空字符串
+			*/
+			if (sResult){
 				console.log( sResult );
-			}	
+			}
 		}
 	}
-	else if( xhr.readyState === 4 )
-	{
+	else if (xhr.readyState === 4){
 		console.log( 'over' );
 	}
 });
