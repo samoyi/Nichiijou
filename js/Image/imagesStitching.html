@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body>
+</body>
+<script>
+'use strict';
+
+
+// 因为图片旋转很容易实现，所以只支持竖直拼接。想要水平拼接只需要先把图片旋转再拼接
+
+const aImgURL = ['top.png', 'middle.png', 'bottom.png'];
+stitch(aImgURL);
+
+
+
+// 根据 URL 加载单张图片到 image 节点
+function loadImg(sURL){
+    return new Promise((resolve, reject)=>{
+        const img = new Image;
+
+        img.addEventListener('load', function(){
+            resolve(img);
+        });
+        img.addEventListener('error', function(){
+            reject(`${sURL} 加载失败`);
+        });
+        img.src = sURL;
+    });
+}
+
+// 使用 loadImg 函数加载多张图片
+function loadAllImg(aURL){
+    return Promise.all(aURL.map(URL=>{
+        return loadImg(URL);
+    }));
+}
+
+
+// 拼接
+// 异步返回 dataURL，默认自动下载
+async function stitch(aURL, oConfig={}){
+    const config = Object.assign({
+        align: 'left',
+        type: 'png',
+        autoDownload: true,
+    }, oConfig);
+
+    try {
+        const aImg = await loadAllImg(aURL);
+
+        // 获取每个图片的尺寸
+        let aWidth = [];
+        let aHeight = [];
+        aImg.forEach(img=>{
+            aWidth.push(img.naturalWidth);
+            aHeight.push(img.naturalHeight);
+        });
+
+        // 设置 canvas 合适的尺寸
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(...aWidth);
+        canvas.height = aHeight.reduce((accu, curr)=>{
+            return accu + curr;
+        });
+
+        const ctx = canvas.getContext('2d');
+
+        // 判断对齐方式
+        const align = ['middle', 'right'].includes(config.align) ? config.align : 'left';
+
+        // 计算每个图片绘制的 y 轴坐标
+        const aY = aHeight.map((height, index, arr)=>{
+            return arr.slice(0, index).reduce((accu, curr)=>{
+                return accu + curr;
+            }, 0);
+        });
+
+        // 这里三条路径虽然可以合并，但还是这样展开更好理解
+        if (align === 'middle') {
+            aImg.forEach((img, index, arr)=>{
+                ctx.drawImage(img, (canvas.width-aWidth[index])/2, aY[index]);
+            });
+        }
+        else if (align === 'right') {
+            aImg.forEach((img, index, arr)=>{
+                ctx.drawImage(img, (canvas.width-aWidth[index]), aY[index]);
+            });
+        }
+        else {
+            aImg.forEach((img, index, arr)=>{
+                ctx.drawImage(img, 0, aY[index]);
+            });
+        }
+
+        // 类型
+        let type = config.type.toLowerCase();
+        const dataURL = canvas.toDataURL(`image/${type==='jpg'?'jpeg':type}`);
+
+        // 自动下载
+        if (config.autoDownload) {
+            const link = document.createElement('a');
+            link.setAttribute('download', `stitched.${type}`);
+            link.setAttribute('href', dataURL);
+            link.click();
+        }
+        return dataURL;
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+</script>
+</html>
