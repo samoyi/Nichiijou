@@ -1,24 +1,30 @@
 
-
-// 根据图片 URL 获得其 ImageData 数组
+// 所有匹配字符的总数
 {
-	function URL2ImageData (sURL) {
-		return new Promise((resolve, reject) => {
-			const canvas = document.createElement('canvas');
-			const ctx = canvas.getContext('2d');
+	function getMatchedAmount(str, re) {
+		let flags = re.flags;
+		flags.includes('g') || (re = new RegExp(re, flags+'g'));
+		return (str.match(re) || []).length;
+	}
+}
 
-			const img = new Image;
-			img.addEventListener('load', function(){
-				canvas.width = this.naturalWidth;
-				canvas.height = this.naturalHeight;
-				ctx.drawImage(this, 0, 0);
-				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-				resolve(imageData);
-			});
-			img.addEventListener('error', function(){
-				reject('Fail to load image');
-			});
-			img.src = sURL;
-		});
+
+// 搜索匹配字符的所有位置
+{
+	function getMatchIndexes(sHaystack, sNeedle){
+		if (sNeedle === '') {
+			throw new Error('sNeedle should not be ""');
+		}
+
+		let indexes = [];
+		let start = 0;
+		let index = null;
+		while (sHaystack.indexOf(sNeedle, start) !== -1) {
+			// TODO 这里两次搜索比较不爽
+			index = sHaystack.indexOf(sNeedle, start);
+			indexes.push(index);
+			start = index + 1;
+		}
+		return indexes;
 	}
 }
