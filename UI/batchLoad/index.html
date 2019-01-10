@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <el-table
+            :data="tableData"
+            style="width: 100%">
+            <el-table-column
+                prop="id"
+                label="ID"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="value"
+                label="值"
+                width="180">
+            </el-table-column>
+            <el-table-column prop="operation" label="操作">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="deleteItem(scope.row.id)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <div class="block">
+            <el-pagination
+                layout="prev, pager, next"
+                v-if="pageAmount>1"
+                :total="pageAmount*10"
+                @current-change="paginationChange"
+            >
+            </el-pagination>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+'use strict';
+
+new Vue({
+    el: '#app',
+    data() {
+        return {
+            dataBatches: [], // 已经加载的数据批次序号。分批加载数据，默认是一次10页的表格数据 // 批次是从1开始
+            allItems: [], // 已经获取到的所有的数据条目
+            dataSum: 0, // 后端条目总数。每次请求接口时都会刷新
+            pageSize: 4, // 数据表格每页显示的条目数量
+            pagesPerBatch: 10, // 每次加载10页的数据
+            currentPageNum: 1,
+        };
+    },
+    computed: {
+        // 每批次加载的条目数
+        itemAmountPerBatch(){
+            return this.pageSize * this.pagesPerBatch;
+        },
+
+        // 当页表格要显示的数据
+        tableData(){
+            const nPageIndex = this.currentPageNum - 1;
+            return this.allItems.slice(nPageIndex*this.pageSize, (nPageIndex+1)*this.pageSize);
+        },
+
+        // 总页数
+        pageAmount(){
+            const n = this.dataSum / this.pageSize;
+            return Math.ceil(n);
+        },
+    },
+    methods: {
+        async getData(pageSize, pageNum){
+            const url = `http://localhost:1234/data?pageSize=${pageSize}&pageNum=${pageNum}`;
+
+            let data = null;
+            try {
+                const res = await fetch(url);
+                const oRes = await res.json();
+                if (oRes.err === 0) {
+                    this.dataSum = oRes.total;
+                    data = oRes.data;
+                }
+                else {
+                    console.error(oRes.msg);
+                }
+            }
+            catch(err){
+                console.error(err);
+            }
+
+            return data;
+        },
+
+        async getBatch(index){
+            // 每个batch的数量  即表格每页的条目数乘以请求的页数。当前默认为 40
+            const pageSize = this.itemAmountPerBatch;
+            const data = await this.getData(pageSize, index);
+            // 记录已经请求过的批次
+            this.dataBatches.push(index);
+            // 请求到的数据项
+            // const items = data.logList;
+            // 将数据项插入到该批次应该在的位置
+            /*
+             * 因为用户通过分页器切换而加载数据时，并不一定是按照 第一批、第二批、第三批 这样的顺序，而有可能是进来后直接点击了最
+             * 后一页，所以会在还没有加载第二批、第三批等等时就加载了最后一批。因此新获取到的数据不能直接 push 到
+             * allItems，而是需要插入到该数组指定的位置
+             */
+            if (index===1){ // 进入页面时初次加载
+                // 根据后端的实际数据总量，初始化数组。这样才能保证用户即使直接加载最后一批数据也能插入到合理的位置
+                this.allItems = Array(this.dataSum);
+            }
+            // 根据批次数和每批次的数量，确定新加载到的数据应该插入到什么位置
+            this.allItems.splice((index-1)*pageSize, pageSize, ...data);
+        },
+
+        paginationChange(n){
+            this.currentPageNum = n;
+            // 当前点击的页码所在的批次
+            const nBatchIndex = Math.ceil(n/this.pagesPerBatch);
+            // 如果当前页码所在批次没有被请求过，则请求
+            if (!this.dataBatches.includes(nBatchIndex)) {
+                this.getBatch(nBatchIndex);
+            }
+        },
+
+
+        // 请求接口删除版权数据条目
+        // resolve 为 true 则表示删除成功
+        async deleteData(id){
+            let res = null;
+            try{
+                res = await this.requestDelete(id);
+                if (res.err !== 0){
+                    throw new Error();
+                }
+                return true;
+            }
+            catch(err){
+                this.$alert('请求删除日志出错', '错误');
+            }
+        },
+
+        // 加载单条数据
+        // 用于删除条目后补全缺失
+        // 参数是该条数据在后端所有数据中的 index
+        async getSingleItem(index){
+            try {
+                const data = await this.getData(1, index);
+                return data[0];
+            }
+            catch(err){
+                this.$alert('版权列表数据更新出错', '错误');
+            }
+        },
+
+        // 删除一条数据后，在当前批次末尾补上之后的一条数据；对之后已加载批次的数据前移一位，即 shift 再 push
+        // 参数为被删除的条目数的前端 index
+        // 调用该方法前，前端数据中的该条目已经被删除
+        async padItems(index){
+            // 被删除元素所在批次
+            const batchIndex = Math.floor(index / this.itemAmountPerBatch) + 1; // 批次是从1开始
+            // 当前批次之后那条数据的后端 index，并根据 index 加载该条数据
+            const nextIndex = batchIndex*this.itemAmountPerBatch;
+            if (nextIndex < this.dataSum){ // 如果删除的最后一批次中的元素，则没有下一个元素
+                const nextItem = await this.getSingleItem(nextIndex);
+                // push 到该批次
+                this.allItems.splice(nextIndex-1, 0, nextItem);
+            }
+
+            // 之后的若干个已加载批次序号
+            const subsequentBatchIndexes = this.dataBatches.filter(batch=>{
+                return batch > batchIndex;
+            });
+
+            // 对每个批次的数据条目向前移动一位
+            const allPromise = subsequentBatchIndexes.map(index=>{
+                return (async ()=>{
+                    // 获取每个批次原本之后的一个 item
+                    // 但还要判断下个批次有没有数据，因为最后一个批次是没有下个批次的
+                    const nextIndex = index*this.itemAmountPerBatch;
+                    if (nextIndex < this.dataSum){
+                        const [nextItem] = await this.getData(1, index*this.itemAmountPerBatch, true);
+                        this.allItems.splice(index*this.itemAmountPerBatch, 0, nextItem);
+                    }
+                    // 删除该批次第一个。从而完成该批次数据向前移一位
+                    this.allItems.splice((index-1)*this.itemAmountPerBatch, 1);
+                })();
+            });
+            try{
+                await Promise.all(allPromise);
+            }
+            catch(err){
+                console.error(err);
+            }
+        },
+
+        // 删除一条数据后，需要从后端获取数据来调整版权表格的数据缺失
+        async deleteItem(id){
+            this.$confirm('确定删除该条记录?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.deleteData(id)
+                .then(async (res)=>{
+                    // 后端删除成功
+                    if (res === true) {
+                        // 被删除的条目的本地 index
+                        const deletedIndex = this.allItems.findIndex(item=>{
+                            // 因为如果不是逐页加载数据，所以有些数组项是空的
+                            return item && item.id === id;
+                        });
+                        // 删除本地条目
+                        this.allItems.splice(deletedIndex, 1);
+                        // pad 版权表格数据
+                        try{
+                            await this.padItems(deletedIndex);
+                        }
+                        catch(err){
+                            throw new Error(err)
+                        }
+
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }
+                })
+                .catch(err=>{
+                    this.copyrightLoading = false;
+                    this.$message({
+                        type: 'info',
+                        message: '删除出错'
+                    });
+                });
+            }).catch(() => {
+                this.copyrightLoading = false;
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+
+        async requestDelete(id){
+            const url = `http://localhost:1234/data?id=${id}`;
+
+            let data = null;
+            try {
+                const res = await fetch(url, {method: 'DELETE'});
+                data = await res.json();
+            }
+            catch(err){
+                console.error(err);
+            }
+
+            return data;
+        },
+    },
+    async created(){
+        await this.getBatch(1);
+    },
+});
+
+
+
+
+
+// deleteData(1)
+// .then(res=>{
+//     if (res.err === 0) {
+//         console.log('deleted');
+//     }
+//     else {
+//         console.error(res.msg);
+//     }
+// });
+</script>
+</html>
