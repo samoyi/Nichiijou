@@ -35,6 +35,40 @@
 }
 
 
+// 将表示KB的整数转换为带单位的文件大小字符串
+{
+	function convertKB(nKB){
+	    if (!Number.isSafeInteger(nKB)){
+	        return NaN;
+	    }
+	    if (nKB < 1024){
+	        return nKB + 'KB';
+	    }
+	    else if (nKB < 1024*1024){
+	        const res = Math.round(nKB/1024*100)/100;
+	        return res !== 1024 ? res + 'MB' : '1GB';
+	    }
+	    else if (nKB < 1024*1024*1024) {
+	        const res = Math.round(nKB/1024/1024*100)/100;
+	        return res !== 1024 ? res + 'GB' : '1TB';
+	    }
+	    else {
+	        return Math.round(nKB/1024/1024/1024*100)/100 + 'TB';
+	    }
+	}
+
+	// 测试
+	const aKB = [0, 1, 1000, 1023,
+	            1024, 1025, 1024*1024-1,
+	            1024*1024, 1024*1024+1, 1024*1024*1024-1,
+	            1024*1024*1024, 1024*1024*1024+1, 1024*1024*1024*2,
+	            '', 1.2
+	        ];
+	aKB.forEach(item=>{
+	    console.log(convertKB(item));
+	})
+}
+
 
 // 在指定闭区间内生成不重复的nNum个整数
 {
